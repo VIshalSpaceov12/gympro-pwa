@@ -14,19 +14,20 @@ import leaderboardRoutes from './routes/leaderboard.routes.js';
 import achievementRoutes from './routes/achievement.routes.js';
 import productRoutes from './routes/product.routes.js';
 import orderRoutes from './routes/order.routes.js';
+import adminRoutes from './routes/admin.routes.js';
 import { seedAchievements } from './utils/seed-achievements.js';
 import { seedProducts } from './utils/seed-products.js';
 
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 4002;
 
 // Middleware
 app.use(helmet());
 app.use(
   cors({
-    origin: process.env.CORS_ORIGINS?.split(',') || ['http://localhost:3000', 'http://localhost:3001'],
+    origin: process.env.CORS_ORIGINS?.split(',') || ['http://localhost:4000', 'http://localhost:4001'],
     credentials: true,
   })
 );
@@ -51,6 +52,7 @@ app.use('/api/leaderboard', leaderboardRoutes);
 app.use('/api/achievements', achievementRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/orders', orderRoutes);
+app.use('/api/admin', adminRoutes);
 
 // Global error handler
 app.use(
