@@ -47,8 +47,8 @@ export const updateVideoSchema = z.object({
 export const createSessionSchema = z.object({
   videoId: z.string().uuid('Invalid video ID').optional(),
   customWorkoutId: z.string().uuid('Invalid custom workout ID').optional(),
-  duration: z.number().int().positive().optional(),
-  caloriesBurned: z.number().int().positive().optional(),
+  duration: z.number().int().min(0).optional(),
+  caloriesBurned: z.number().int().min(0).optional(),
   notes: z.string().max(1000).optional(),
 });
 

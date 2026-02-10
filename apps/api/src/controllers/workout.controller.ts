@@ -490,7 +490,6 @@ export async function createSession(req: Request, res: Response): Promise<void> 
         duration,
         caloriesBurned,
         notes,
-        completedAt: duration ? new Date() : undefined,
       },
       include: {
         video: {
@@ -503,6 +502,49 @@ export async function createSession(req: Request, res: Response): Promise<void> 
   } catch (error) {
     console.error('Create session error:', error);
     sendError(res, 'Failed to create workout session', 500);
+  }
+}
+
+// PATCH /api/workouts/sessions/:id/complete (Authenticated)
+export async function completeSession(req: Request, res: Response): Promise<void> {
+  try {
+    if (!req.user) {
+      sendError(res, 'Authentication required', 401);
+      return;
+    }
+
+    const { id } = req.params;
+    const { duration, caloriesBurned } = req.body;
+
+    const session = await prisma.workoutSession.findUnique({ where: { id } });
+    if (!session || session.userId !== req.user.userId) {
+      sendError(res, 'Session not found', 404);
+      return;
+    }
+
+    if (session.completedAt) {
+      sendError(res, 'Session already completed', 400);
+      return;
+    }
+
+    const updated = await prisma.workoutSession.update({
+      where: { id },
+      data: {
+        completedAt: new Date(),
+        duration: duration ?? session.duration,
+        caloriesBurned: caloriesBurned ?? session.caloriesBurned,
+      },
+      include: {
+        video: {
+          select: { id: true, title: true, thumbnailUrl: true, duration: true },
+        },
+      },
+    });
+
+    sendSuccess(res, updated);
+  } catch (error) {
+    console.error('Complete session error:', error);
+    sendError(res, 'Failed to complete workout session', 500);
   }
 }
 

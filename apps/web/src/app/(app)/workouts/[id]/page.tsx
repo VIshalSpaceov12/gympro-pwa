@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -13,11 +13,12 @@ import {
   Clock,
   Flame,
   Eye,
-  Star,
   CheckCircle,
   Loader2,
+  Square,
+  Timer,
 } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 
 interface VideoDetail {
   id: string;
@@ -41,6 +42,18 @@ const difficultyConfig: Record<string, { label: string; className: string }> = {
   ADVANCED: { label: 'Advanced', className: 'bg-red-100 text-red-700' },
 };
 
+type WorkoutState = 'idle' | 'starting' | 'active' | 'completing' | 'completed';
+
+function formatElapsed(seconds: number): string {
+  const h = Math.floor(seconds / 3600);
+  const m = Math.floor((seconds % 3600) / 60);
+  const s = seconds % 60;
+  if (h > 0) {
+    return `${h}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+  }
+  return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+}
+
 export default function VideoDetailPage() {
   const params = useParams();
   const id = params.id as string;
@@ -48,9 +61,13 @@ export default function VideoDetailPage() {
   const [related, setRelated] = useState<VideoCardData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [sessionStarted, setSessionStarted] = useState(false);
-  const [sessionLoading, setSessionLoading] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
+
+  // Workout session state
+  const [workoutState, setWorkoutState] = useState<WorkoutState>('idle');
+  const [sessionId, setSessionId] = useState<string | null>(null);
+  const [elapsed, setElapsed] = useState(0);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   useEffect(() => {
     async function fetchData() {
@@ -81,7 +98,22 @@ export default function VideoDetailPage() {
     if (id) fetchData();
   }, [id]);
 
-  // Auto-hide toast after 3 seconds
+  // Timer
+  useEffect(() => {
+    if (workoutState === 'active') {
+      timerRef.current = setInterval(() => {
+        setElapsed((prev) => prev + 1);
+      }, 1000);
+    }
+    return () => {
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+        timerRef.current = null;
+      }
+    };
+  }, [workoutState]);
+
+  // Auto-hide toast
   useEffect(() => {
     if (toastMessage) {
       const timer = setTimeout(() => setToastMessage(''), 3000);
@@ -90,29 +122,64 @@ export default function VideoDetailPage() {
   }, [toastMessage]);
 
   const handleStartWorkout = async () => {
-    if (!video || sessionLoading || sessionStarted) return;
-    setSessionLoading(true);
+    if (!video || workoutState !== 'idle') return;
+    setWorkoutState('starting');
     try {
-      const result = await apiClient('/api/workouts/sessions', {
+      const result = await apiClient<{ id: string }>('/api/workouts/sessions', {
         method: 'POST',
         body: JSON.stringify({
           videoId: video.id,
-          duration: video.duration,
-          caloriesBurned: video.caloriesBurned || 0,
         }),
       });
-      if (result.success) {
-        setSessionStarted(true);
-        setToastMessage('Workout session started! Great job!');
+      if (result.success && result.data) {
+        setSessionId(result.data.id);
+        setElapsed(0);
+        setWorkoutState('active');
       } else {
+        setWorkoutState('idle');
         setToastMessage('Failed to start session. Try again.');
       }
     } catch {
+      setWorkoutState('idle');
       setToastMessage('Failed to start session. Try again.');
-    } finally {
-      setSessionLoading(false);
     }
   };
+
+  const handleCompleteWorkout = useCallback(async () => {
+    if (!sessionId || workoutState !== 'active') return;
+    setWorkoutState('completing');
+
+    // Stop timer
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+      timerRef.current = null;
+    }
+
+    try {
+      const caloriesPerSecond = video?.caloriesBurned && video.duration
+        ? video.caloriesBurned / video.duration
+        : 0;
+      const actualCalories = Math.round(caloriesPerSecond * elapsed);
+
+      const result = await apiClient(`/api/workouts/sessions/${sessionId}/complete`, {
+        method: 'PATCH',
+        body: JSON.stringify({
+          duration: elapsed,
+          caloriesBurned: actualCalories || video?.caloriesBurned || 0,
+        }),
+      });
+      if (result.success) {
+        setWorkoutState('completed');
+        setToastMessage('Workout completed! Great job!');
+      } else {
+        setWorkoutState('active');
+        setToastMessage('Failed to complete session. Try again.');
+      }
+    } catch {
+      setWorkoutState('active');
+      setToastMessage('Failed to complete session. Try again.');
+    }
+  }, [sessionId, workoutState, elapsed, video]);
 
   const difficulty = video ? (difficultyConfig[video.difficulty] || difficultyConfig.BEGINNER) : null;
 
@@ -142,19 +209,21 @@ export default function VideoDetailPage() {
   return (
     <div>
       {/* Toast */}
-      {toastMessage && (
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -20 }}
-          className="fixed left-4 right-4 top-20 z-50 mx-auto max-w-md rounded-xl bg-green-600 px-4 py-3 text-center text-sm font-medium text-white shadow-lg sm:left-auto sm:right-6"
-        >
-          <div className="flex items-center justify-center gap-2">
-            <CheckCircle className="h-4 w-4" />
-            {toastMessage}
-          </div>
-        </motion.div>
-      )}
+      <AnimatePresence>
+        {toastMessage && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            className="fixed left-4 right-4 top-20 z-50 mx-auto max-w-md rounded-xl bg-green-600 px-4 py-3 text-center text-sm font-medium text-white shadow-lg sm:left-auto sm:right-6"
+          >
+            <div className="flex items-center justify-center gap-2">
+              <CheckCircle className="h-4 w-4" />
+              {toastMessage}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Back button */}
       <Link
@@ -192,13 +261,6 @@ export default function VideoDetailPage() {
             <Play className="h-7 w-7 text-primary sm:h-8 sm:w-8" fill="currentColor" />
           </div>
         </button>
-        {/* Premium badge */}
-        {video.isPremium && (
-          <div className="absolute left-3 top-3 flex items-center gap-1 rounded-lg bg-amber-500 px-3 py-1 text-sm font-medium text-white">
-            <Star className="h-4 w-4" />
-            Premium
-          </div>
-        )}
       </motion.div>
 
       {/* Title & Description */}
@@ -270,36 +332,135 @@ export default function VideoDetailPage() {
           </div>
         )}
 
-        {/* Start Workout Button */}
-        <button
-          onClick={handleStartWorkout}
-          disabled={sessionLoading || sessionStarted}
-          className={cn(
-            'mt-6 flex w-full items-center justify-center gap-2 rounded-xl px-6 py-4 text-base font-semibold transition-all sm:w-auto',
-            sessionStarted
-              ? 'cursor-not-allowed bg-green-500 text-white'
-              : sessionLoading
-                ? 'cursor-wait bg-primary/80 text-white'
-                : 'bg-primary text-white hover:bg-primary-dark active:scale-[0.98] shadow-lg shadow-primary/25'
-          )}
-        >
-          {sessionLoading ? (
-            <>
-              <Loader2 className="h-5 w-5 animate-spin" />
-              Starting...
-            </>
-          ) : sessionStarted ? (
-            <>
-              <CheckCircle className="h-5 w-5" />
-              Workout Started
-            </>
-          ) : (
-            <>
-              <Play className="h-5 w-5" fill="currentColor" />
-              Start Workout
-            </>
-          )}
-        </button>
+        {/* Workout Session Controls */}
+        <div className="mt-6">
+          <AnimatePresence mode="wait">
+            {/* IDLE — Start Workout */}
+            {workoutState === 'idle' && (
+              <motion.button
+                key="start"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                onClick={handleStartWorkout}
+                className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-6 py-4 text-base font-semibold text-white transition-all hover:bg-primary/90 active:scale-[0.98] shadow-lg shadow-primary/25 sm:w-auto"
+              >
+                <Play className="h-5 w-5" fill="currentColor" />
+                Start Workout
+              </motion.button>
+            )}
+
+            {/* STARTING — Loading */}
+            {workoutState === 'starting' && (
+              <motion.button
+                key="starting"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                disabled
+                className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary/80 px-6 py-4 text-base font-semibold text-white cursor-wait sm:w-auto"
+              >
+                <Loader2 className="h-5 w-5 animate-spin" />
+                Starting...
+              </motion.button>
+            )}
+
+            {/* ACTIVE — Workout In Progress */}
+            {workoutState === 'active' && (
+              <motion.div
+                key="active"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                className="rounded-xl border-2 border-primary/20 bg-primary/5 dark:bg-primary/10 p-5"
+              >
+                {/* Status */}
+                <div className="flex items-center gap-2 mb-4">
+                  <span className="relative flex h-3 w-3">
+                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75" />
+                    <span className="relative inline-flex h-3 w-3 rounded-full bg-green-500" />
+                  </span>
+                  <span className="text-sm font-semibold text-green-700 dark:text-green-400">Workout In Progress</span>
+                </div>
+
+                {/* Timer */}
+                <div className="flex items-center justify-center gap-3 mb-4">
+                  <Timer className="h-6 w-6 text-primary" />
+                  <span className="text-4xl font-bold tabular-nums text-gray-900 dark:text-white tracking-tight">
+                    {formatElapsed(elapsed)}
+                  </span>
+                </div>
+
+                {/* Motivational Text */}
+                <p className="text-center text-sm text-muted mb-5">
+                  {elapsed < 60
+                    ? 'You got this! Keep pushing!'
+                    : elapsed < 300
+                      ? 'Great pace! Stay focused!'
+                      : elapsed < 600
+                        ? 'Halfway there! Stay strong!'
+                        : elapsed < 1200
+                          ? 'Amazing endurance! Keep it up!'
+                          : 'You\'re unstoppable! Incredible work!'}
+                </p>
+
+                {/* Complete Button */}
+                <button
+                  onClick={handleCompleteWorkout}
+                  className="flex w-full items-center justify-center gap-2 rounded-xl bg-green-600 px-6 py-4 text-base font-semibold text-white transition-all hover:bg-green-700 active:scale-[0.98] shadow-lg"
+                >
+                  <Square className="h-5 w-5" fill="currentColor" />
+                  Complete Workout
+                </button>
+              </motion.div>
+            )}
+
+            {/* COMPLETING — Loading */}
+            {workoutState === 'completing' && (
+              <motion.div
+                key="completing"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="rounded-xl border-2 border-primary/20 bg-primary/5 dark:bg-primary/10 p-5"
+              >
+                <div className="flex items-center justify-center gap-3 mb-3">
+                  <Timer className="h-6 w-6 text-primary" />
+                  <span className="text-4xl font-bold tabular-nums text-gray-900 dark:text-white tracking-tight">
+                    {formatElapsed(elapsed)}
+                  </span>
+                </div>
+                <button
+                  disabled
+                  className="flex w-full items-center justify-center gap-2 rounded-xl bg-green-600/70 px-6 py-4 text-base font-semibold text-white cursor-wait"
+                >
+                  <Loader2 className="h-5 w-5 animate-spin" />
+                  Finishing Up...
+                </button>
+              </motion.div>
+            )}
+
+            {/* COMPLETED — Done */}
+            {workoutState === 'completed' && (
+              <motion.div
+                key="completed"
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="rounded-xl border-2 border-green-200 dark:border-green-800 bg-green-50 dark:bg-green-950/30 p-5 text-center"
+              >
+                <div className="mb-3 flex justify-center">
+                  <div className="flex h-14 w-14 items-center justify-center rounded-full bg-green-100 dark:bg-green-900/50">
+                    <CheckCircle className="h-7 w-7 text-green-600" />
+                  </div>
+                </div>
+                <h3 className="text-lg font-bold text-gray-900 dark:text-white">Workout Complete!</h3>
+                <p className="mt-1 text-sm text-muted">
+                  Duration: {formatElapsed(elapsed)} &middot; Great work!
+                </p>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
       </motion.div>
 
       {/* Related Videos */}

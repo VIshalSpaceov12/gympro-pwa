@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { Star, Flame } from 'lucide-react';
+import { Flame } from 'lucide-react';
 import { cn, formatDuration } from '@/lib/utils';
 
 export interface VideoCardData {
@@ -57,13 +57,6 @@ export function VideoCard({ video, className }: VideoCardProps) {
           {formatDuration(video.duration)}
         </div>
 
-        {/* Premium badge - top left */}
-        {video.isPremium && (
-          <div className="absolute left-2 top-2 flex items-center gap-1 rounded-md bg-amber-500 px-2 py-0.5 text-xs font-medium text-white">
-            <Star className="h-3 w-3" />
-            PRO
-          </div>
-        )}
       </div>
 
       {/* Content */}

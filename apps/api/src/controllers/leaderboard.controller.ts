@@ -129,6 +129,26 @@ async function computeStreakScores(since: Date | null): Promise<{ userId: string
     .slice(0, 50);
 }
 
+async function computeTimeScores(since: Date | null): Promise<{ userId: string; score: number }[]> {
+  const where: Record<string, unknown> = {
+    completedAt: { not: null },
+    duration: { not: null, gt: 0 },
+  };
+  if (since) {
+    where.completedAt = { ...((where.completedAt as Record<string, unknown>) || {}), gte: since };
+  }
+
+  const results = await prisma.workoutSession.groupBy({
+    by: ['userId'],
+    where,
+    _sum: { duration: true },
+    orderBy: { _sum: { duration: 'desc' } },
+    take: 50,
+  });
+
+  return results.map((r) => ({ userId: r.userId, score: r._sum.duration ?? 0 }));
+}
+
 async function computeScores(
   period: LeaderboardPeriod,
   category: LeaderboardCategory
@@ -142,6 +162,8 @@ async function computeScores(
       return computeCalorieScores(since);
     case 'STREAK':
       return computeStreakScores(since);
+    case 'TOTAL_TIME':
+      return computeTimeScores(since);
     default:
       return [];
   }
@@ -164,7 +186,7 @@ export async function getLeaderboard(req: Request, res: Response): Promise<void>
 
     // Validate enum values
     const validPeriods: LeaderboardPeriod[] = ['WEEKLY', 'MONTHLY', 'ALL_TIME'];
-    const validCategories: LeaderboardCategory[] = ['WORKOUTS', 'CALORIES', 'STREAK'];
+    const validCategories: LeaderboardCategory[] = ['WORKOUTS', 'CALORIES', 'STREAK', 'TOTAL_TIME'];
 
     if (!validPeriods.includes(period)) {
       sendError(res, 'Invalid period. Must be WEEKLY, MONTHLY, or ALL_TIME', 400);
@@ -334,7 +356,7 @@ export async function getMyRank(req: Request, res: Response): Promise<void> {
     }
 
     const periods: LeaderboardPeriod[] = ['WEEKLY', 'MONTHLY', 'ALL_TIME'];
-    const categories: LeaderboardCategory[] = ['WORKOUTS', 'CALORIES', 'STREAK'];
+    const categories: LeaderboardCategory[] = ['WORKOUTS', 'CALORIES', 'STREAK', 'TOTAL_TIME'];
 
     const rankings: Record<string, Record<string, { rank: number; score: number }>> = {};
 
@@ -388,7 +410,7 @@ export async function refreshLeaderboard(req: Request, res: Response): Promise<v
     }
 
     const periods: LeaderboardPeriod[] = ['WEEKLY', 'MONTHLY', 'ALL_TIME'];
-    const categories: LeaderboardCategory[] = ['WORKOUTS', 'CALORIES', 'STREAK'];
+    const categories: LeaderboardCategory[] = ['WORKOUTS', 'CALORIES', 'STREAK', 'TOTAL_TIME'];
 
     let totalUpserted = 0;
 

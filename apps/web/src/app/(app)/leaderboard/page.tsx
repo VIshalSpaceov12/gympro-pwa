@@ -3,11 +3,11 @@
 import { useEffect, useState, useCallback } from 'react';
 import { apiClient } from '@/lib/api';
 import { cn } from '@/lib/utils';
-import { Trophy, Medal, Flame, Zap, Crown, User } from 'lucide-react';
+import { Trophy, Medal, Flame, Zap, Crown, User, Clock } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 type Period = 'WEEKLY' | 'MONTHLY' | 'ALL_TIME';
-type Category = 'WORKOUTS' | 'CALORIES' | 'STREAK';
+type Category = 'WORKOUTS' | 'CALORIES' | 'STREAK' | 'TOTAL_TIME';
 
 interface LeaderboardUser {
   rank: number;
@@ -36,6 +36,7 @@ const categories: { label: string; value: Category; icon: typeof Trophy }[] = [
   { label: 'Workouts', value: 'WORKOUTS', icon: Zap },
   { label: 'Calories', value: 'CALORIES', icon: Flame },
   { label: 'Streak', value: 'STREAK', icon: Trophy },
+  { label: 'Total Time', value: 'TOTAL_TIME', icon: Clock },
 ];
 
 function getRankBadge(rank: number) {
@@ -51,6 +52,14 @@ function formatScore(score: number, category: Category): string {
   }
   if (category === 'STREAK') {
     return `${score} day${score !== 1 ? 's' : ''}`;
+  }
+  if (category === 'TOTAL_TIME') {
+    const hours = Math.floor(score / 3600);
+    const minutes = Math.floor((score % 3600) / 60);
+    if (hours > 0) {
+      return `${hours}h ${minutes}m`;
+    }
+    return `${minutes}m`;
   }
   return score.toString();
 }

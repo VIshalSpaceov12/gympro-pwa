@@ -22,6 +22,7 @@ import {
   updateVideo,
   deleteVideo,
   createSession,
+  completeSession,
   getUserSessions,
   getWorkoutHistory,
 } from '../controllers/workout.controller.js';
@@ -61,6 +62,7 @@ router.delete('/videos/:id', authenticate, requireRole('ADMIN'), deleteVideo);
 
 // Authenticated users
 router.post('/sessions', authenticate, validate(createSessionSchema), createSession);
+router.patch('/sessions/:id/complete', authenticate, completeSession);
 router.get('/sessions', authenticate, getUserSessions);
 router.get('/history', authenticate, getWorkoutHistory);
 
