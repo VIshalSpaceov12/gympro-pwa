@@ -61,11 +61,11 @@ export default function RegisterPage() {
 
   return (
     <div>
-      <h2 className="text-2xl font-bold text-gray-900 mb-1">Create an account</h2>
+      <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-1">Create an account</h2>
       <p className="text-sm text-muted mb-6">Start your fitness journey today</p>
 
       {serverError && (
-        <div className="mb-4 rounded-lg bg-red-50 border border-red-200 p-3 text-sm text-red-600">
+        <div className="mb-4 rounded-lg bg-red-50 border border-red-200 dark:bg-red-900/20 dark:border-red-800 p-3 text-sm text-red-600 dark:text-red-400">
           {serverError}
         </div>
       )}
@@ -74,7 +74,7 @@ export default function RegisterPage() {
         {/* Name fields */}
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               First name
             </label>
             <div className="relative">
@@ -85,7 +85,7 @@ export default function RegisterPage() {
                 autoComplete="given-name"
                 placeholder="John"
                 className={cn(
-                  'w-full rounded-lg border bg-white py-2.5 pl-10 pr-4 text-sm outline-none transition-colors',
+                  'w-full rounded-lg border bg-white dark:bg-gray-800 dark:text-white py-2.5 pl-10 pr-4 text-sm outline-none transition-colors',
                   'focus:border-primary focus:ring-2 focus:ring-primary/20',
                   errors.firstName ? 'border-red-500' : 'border-border'
                 )}
@@ -98,7 +98,7 @@ export default function RegisterPage() {
           </div>
 
           <div>
-            <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               Last name
             </label>
             <div className="relative">
@@ -109,7 +109,7 @@ export default function RegisterPage() {
                 autoComplete="family-name"
                 placeholder="Doe"
                 className={cn(
-                  'w-full rounded-lg border bg-white py-2.5 pl-10 pr-4 text-sm outline-none transition-colors',
+                  'w-full rounded-lg border bg-white dark:bg-gray-800 dark:text-white py-2.5 pl-10 pr-4 text-sm outline-none transition-colors',
                   'focus:border-primary focus:ring-2 focus:ring-primary/20',
                   errors.lastName ? 'border-red-500' : 'border-border'
                 )}
@@ -124,7 +124,7 @@ export default function RegisterPage() {
 
         {/* Email field */}
         <div>
-          <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
             Email
           </label>
           <div className="relative">
@@ -135,7 +135,7 @@ export default function RegisterPage() {
               autoComplete="email"
               placeholder="you@example.com"
               className={cn(
-                'w-full rounded-lg border bg-white py-2.5 pl-10 pr-4 text-sm outline-none transition-colors',
+                'w-full rounded-lg border bg-white dark:bg-gray-800 dark:text-white py-2.5 pl-10 pr-4 text-sm outline-none transition-colors',
                 'focus:border-primary focus:ring-2 focus:ring-primary/20',
                 errors.email ? 'border-red-500' : 'border-border'
               )}
@@ -149,7 +149,7 @@ export default function RegisterPage() {
 
         {/* Password field */}
         <div>
-          <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
             Password
           </label>
           <div className="relative">
@@ -160,7 +160,7 @@ export default function RegisterPage() {
               autoComplete="new-password"
               placeholder="Create a password"
               className={cn(
-                'w-full rounded-lg border bg-white py-2.5 pl-10 pr-10 text-sm outline-none transition-colors',
+                'w-full rounded-lg border bg-white dark:bg-gray-800 dark:text-white py-2.5 pl-10 pr-10 text-sm outline-none transition-colors',
                 'focus:border-primary focus:ring-2 focus:ring-primary/20',
                 errors.password ? 'border-red-500' : 'border-border'
               )}
@@ -169,8 +169,9 @@ export default function RegisterPage() {
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
               tabIndex={-1}
+              aria-label={showPassword ? 'Hide password' : 'Show password'}
             >
               {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
             </button>
@@ -182,7 +183,7 @@ export default function RegisterPage() {
           {/* Password strength indicator */}
           {passwordValue && (
             <div className="mt-2">
-              <div className="h-1.5 w-full bg-gray-200 rounded-full overflow-hidden">
+              <div className="h-1.5 w-full bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
                 <div
                   className={cn('h-full rounded-full transition-all duration-300', passwordStrength.color)}
                   style={{ width: passwordStrength.width }}

@@ -79,7 +79,7 @@ function PodiumCard({ user, category }: { user: LeaderboardUser; category: Categ
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, delay: user.rank * 0.1 }}
       className={cn(
-        'relative flex flex-col items-center rounded-2xl bg-white p-4 shadow-sm',
+        'relative flex flex-col items-center rounded-2xl bg-white p-4 shadow-sm dark:bg-gray-900',
         isFirst && 'ring-2 ring-amber-400/50 shadow-amber-100',
         user.isCurrentUser && 'ring-2 ring-primary/40'
       )}
@@ -98,7 +98,7 @@ function PodiumCard({ user, category }: { user: LeaderboardUser; category: Categ
       <AvatarPlaceholder firstName={user.firstName} lastName={user.lastName} size={isFirst ? 'lg' : 'md'} />
 
       {/* Name */}
-      <p className={cn('mt-2 text-center text-sm font-semibold text-gray-900', isFirst && 'text-base')}>
+      <p className={cn('mt-2 text-center text-sm font-semibold text-gray-900 dark:text-white', isFirst && 'text-base')}>
         {user.firstName} {user.lastName.charAt(0)}.
       </p>
 
@@ -122,7 +122,7 @@ function LeaderboardRow({ user, category, index }: { user: LeaderboardUser; cate
       transition={{ duration: 0.3, delay: index * 0.03 }}
       className={cn(
         'flex items-center gap-3 rounded-xl px-4 py-3 transition-colors',
-        user.isCurrentUser ? 'bg-primary/5 ring-1 ring-primary/20' : 'bg-white'
+        user.isCurrentUser ? 'bg-primary/5 ring-1 ring-primary/20' : 'bg-white dark:bg-gray-900'
       )}
     >
       {/* Rank */}
@@ -135,14 +135,14 @@ function LeaderboardRow({ user, category, index }: { user: LeaderboardUser; cate
 
       {/* Name */}
       <div className="flex-1 min-w-0">
-        <p className="truncate text-sm font-medium text-gray-900">
+        <p className="truncate text-sm font-medium text-gray-900 dark:text-white">
           {user.firstName} {user.lastName}
           {user.isCurrentUser && <span className="ml-1 text-xs text-primary">(You)</span>}
         </p>
       </div>
 
       {/* Score */}
-      <span className="text-sm font-semibold text-gray-900">
+      <span className="text-sm font-semibold text-gray-900 dark:text-white">
         {formatScore(user.score, category)}
       </span>
     </motion.div>
@@ -192,12 +192,12 @@ export default function LeaderboardPage() {
         transition={{ duration: 0.3 }}
         className="mb-6"
       >
-        <h1 className="text-2xl font-bold text-gray-900 sm:text-3xl">Leaderboard</h1>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white sm:text-3xl">Leaderboard</h1>
         <p className="mt-1 text-sm text-muted">See how you stack up against the community</p>
       </motion.div>
 
       {/* Period Tabs */}
-      <div className="mb-4 flex rounded-xl bg-white p-1 shadow-sm">
+      <div className="mb-4 flex rounded-xl bg-white p-1 shadow-sm dark:bg-gray-900">
         {periods.map((p) => (
           <button
             key={p.value}
@@ -206,7 +206,7 @@ export default function LeaderboardPage() {
               'flex-1 rounded-lg py-2.5 text-sm font-medium transition-all',
               period === p.value
                 ? 'bg-primary text-white shadow-sm'
-                : 'text-gray-600 hover:text-gray-900'
+                : 'text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white'
             )}
           >
             {p.label}
@@ -226,7 +226,7 @@ export default function LeaderboardPage() {
                 'flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-medium transition-colors',
                 category === c.value
                   ? 'bg-primary text-white'
-                  : 'bg-white text-gray-700 hover:bg-gray-100'
+                  : 'bg-white text-gray-700 hover:bg-gray-100 dark:bg-gray-900 dark:text-gray-300 dark:hover:bg-gray-800'
               )}
             >
               <Icon className="h-4 w-4" />
@@ -242,20 +242,20 @@ export default function LeaderboardPage() {
           {/* Podium skeleton */}
           <div className="grid grid-cols-3 gap-3">
             {Array.from({ length: 3 }).map((_, i) => (
-              <div key={i} className="flex flex-col items-center rounded-2xl bg-white p-4 shadow-sm">
-                <div className="h-10 w-10 animate-pulse rounded-full bg-gray-200" />
-                <div className="mt-2 h-3 w-16 animate-pulse rounded bg-gray-200" />
-                <div className="mt-1 h-3 w-10 animate-pulse rounded bg-gray-200" />
+              <div key={i} className="flex flex-col items-center rounded-2xl bg-white p-4 shadow-sm dark:bg-gray-900">
+                <div className="h-10 w-10 animate-pulse rounded-full bg-gray-200 dark:bg-gray-700" />
+                <div className="mt-2 h-3 w-16 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
+                <div className="mt-1 h-3 w-10 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
               </div>
             ))}
           </div>
           {/* Row skeletons */}
           {Array.from({ length: 5 }).map((_, i) => (
-            <div key={i} className="flex items-center gap-3 rounded-xl bg-white px-4 py-3">
-              <div className="h-4 w-8 animate-pulse rounded bg-gray-200" />
-              <div className="h-8 w-8 animate-pulse rounded-full bg-gray-200" />
-              <div className="h-4 flex-1 animate-pulse rounded bg-gray-200" />
-              <div className="h-4 w-16 animate-pulse rounded bg-gray-200" />
+            <div key={i} className="flex items-center gap-3 rounded-xl bg-white px-4 py-3 dark:bg-gray-900">
+              <div className="h-4 w-8 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
+              <div className="h-8 w-8 animate-pulse rounded-full bg-gray-200 dark:bg-gray-700" />
+              <div className="h-4 flex-1 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
+              <div className="h-4 w-16 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
             </div>
           ))}
         </div>
@@ -295,9 +295,9 @@ export default function LeaderboardPage() {
           )}
         </>
       ) : (
-        <div className="flex flex-col items-center justify-center rounded-xl bg-white py-16 shadow-sm">
+        <div className="flex flex-col items-center justify-center rounded-xl bg-white py-16 shadow-sm dark:bg-gray-900">
           <Medal className="mb-4 h-12 w-12 text-gray-300" />
-          <h3 className="text-lg font-semibold text-gray-900">No rankings yet</h3>
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">No rankings yet</h3>
           <p className="mt-1 text-center text-sm text-muted">
             Complete workouts to appear on the leaderboard
           </p>

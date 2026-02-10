@@ -9,3 +9,5 @@ export * from './schemas/nutrition.schema';
 export * from './schemas/community.schema';
 export * from './schemas/leaderboard.schema';
 export * from './schemas/product.schema';
+export * from './schemas/order.schema';
+export * from './schemas/profile.schema';

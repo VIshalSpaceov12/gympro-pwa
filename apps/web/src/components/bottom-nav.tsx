@@ -57,7 +57,7 @@ export function BottomNav() {
   };
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-border bg-white sm:hidden">
+    <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-border bg-white dark:bg-gray-900 sm:hidden" role="navigation" aria-label="Bottom navigation">
       <div className="flex items-center justify-around">
         {navItems.map((item) => {
           const isActive =
@@ -68,6 +68,8 @@ export function BottomNav() {
             <Link
               key={item.label}
               href={item.href}
+              aria-current={isActive ? 'page' : undefined}
+              aria-label={item.label}
               className={cn(
                 'flex flex-1 flex-col items-center gap-1 py-2 text-xs transition-colors',
                 isActive ? 'text-primary' : 'text-muted'
@@ -85,6 +87,8 @@ export function BottomNav() {
         <div className="relative flex-1" ref={menuRef}>
           <button
             onClick={() => setMenuOpen(!menuOpen)}
+            aria-label="User menu"
+            aria-expanded={menuOpen}
             className={cn(
               'flex w-full flex-col items-center gap-1 py-2 text-xs transition-colors',
               isUserPage || menuOpen ? 'text-primary' : 'text-muted'
@@ -102,7 +106,7 @@ export function BottomNav() {
           </button>
 
           {menuOpen && (
-            <div className="absolute bottom-full right-0 mb-2 w-48 rounded-lg border border-border bg-white py-1 shadow-lg">
+            <div className="absolute bottom-full right-0 mb-2 w-48 rounded-lg border border-border bg-white dark:bg-gray-900 py-1 shadow-lg">
               {userMenuItems.map((item) => {
                 const isActive =
                   pathname === item.href || pathname.startsWith(item.href + '/');
@@ -114,7 +118,7 @@ export function BottomNav() {
                       'flex items-center gap-3 px-4 py-2.5 text-sm transition-colors',
                       isActive
                         ? 'bg-primary/10 text-primary'
-                        : 'text-gray-700 hover:bg-gray-50'
+                        : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800'
                     )}
                   >
                     <item.icon className="h-4 w-4" />
@@ -125,7 +129,7 @@ export function BottomNav() {
               <div className="my-1 border-t border-border" />
               <button
                 onClick={handleLogout}
-                className="flex w-full items-center gap-3 px-4 py-2.5 text-sm text-red-600 transition-colors hover:bg-red-50"
+                className="flex w-full items-center gap-3 px-4 py-2.5 text-sm text-red-600 dark:text-red-400 transition-colors hover:bg-red-50 dark:hover:bg-red-950"
               >
                 <LogOut className="h-4 w-4" />
                 Logout

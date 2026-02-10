@@ -13,6 +13,7 @@ import communityRoutes from './routes/community.routes.js';
 import leaderboardRoutes from './routes/leaderboard.routes.js';
 import achievementRoutes from './routes/achievement.routes.js';
 import productRoutes from './routes/product.routes.js';
+import orderRoutes from './routes/order.routes.js';
 import { seedAchievements } from './utils/seed-achievements.js';
 import { seedProducts } from './utils/seed-products.js';
 
@@ -49,6 +50,7 @@ app.use('/api/posts', communityRoutes);
 app.use('/api/leaderboard', leaderboardRoutes);
 app.use('/api/achievements', achievementRoutes);
 app.use('/api/products', productRoutes);
+app.use('/api/orders', orderRoutes);
 
 // Global error handler
 app.use(

@@ -203,12 +203,12 @@ export default function ActivityPage() {
         transition={{ duration: 0.3 }}
         className="mb-6"
       >
-        <h1 className="text-2xl font-bold text-gray-900 sm:text-3xl">Activity</h1>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white sm:text-3xl">Activity</h1>
         <p className="mt-1 text-sm text-muted">Track your daily fitness progress</p>
       </motion.div>
 
       {error && (
-        <div className="mb-6 rounded-xl bg-red-50 p-4 text-sm text-red-700">
+        <div className="mb-6 rounded-xl bg-red-50 dark:bg-red-900/20 p-4 text-sm text-red-700 dark:text-red-400">
           {error}
         </div>
       )}
@@ -228,7 +228,7 @@ export default function ActivityPage() {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3, delay: index * 0.05 }}
-                className="rounded-xl bg-white p-4 shadow-sm"
+                className="rounded-xl bg-white dark:bg-gray-900 p-4 shadow-sm"
               >
                 <div className="flex items-center justify-between mb-3">
                   <div className={cn('flex h-9 w-9 items-center justify-center rounded-lg', activity.iconBg)}>
@@ -236,12 +236,12 @@ export default function ActivityPage() {
                   </div>
                   <button
                     onClick={() => openLogModal(activity.type)}
-                    className="flex h-7 w-7 items-center justify-center rounded-full bg-gray-100 text-muted transition-colors hover:bg-primary hover:text-white"
+                    className="flex h-7 w-7 items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800 text-muted transition-colors hover:bg-primary hover:text-white"
                   >
                     <Plus className="h-3.5 w-3.5" />
                   </button>
                 </div>
-                <p className="text-2xl font-bold text-gray-900">
+                <p className="text-2xl font-bold text-gray-900 dark:text-white">
                   {Math.round(summary?.today[activity.type] ?? 0).toLocaleString()}
                 </p>
                 <p className="text-xs text-muted">{activity.label} today</p>
@@ -253,15 +253,15 @@ export default function ActivityPage() {
           <section className="mb-8">
             <div className="mb-4 flex items-center gap-2">
               <TrendingUp className="h-5 w-5 text-primary" />
-              <h2 className="text-lg font-bold text-gray-900">Weekly Summary</h2>
+              <h2 className="text-lg font-bold text-gray-900 dark:text-white">Weekly Summary</h2>
             </div>
 
-            <div className="rounded-xl bg-white p-5 shadow-sm">
+            <div className="rounded-xl bg-white dark:bg-gray-900 p-5 shadow-sm">
               {/* Weekly totals */}
               <div className="mb-6 grid grid-cols-2 gap-4 sm:grid-cols-4">
                 {activityTypes.map((activity) => (
                   <div key={activity.type} className="text-center">
-                    <p className="text-lg font-bold text-gray-900">
+                    <p className="text-lg font-bold text-gray-900 dark:text-white">
                       {Math.round(summary?.weekly[activity.type] ?? 0).toLocaleString()}
                     </p>
                     <p className="text-xs text-muted">{activity.label}</p>
@@ -271,7 +271,7 @@ export default function ActivityPage() {
 
               {/* Simple bar chart for steps */}
               <div>
-                <p className="mb-3 text-sm font-medium text-gray-700">Steps This Week</p>
+                <p className="mb-3 text-sm font-medium text-gray-700 dark:text-gray-300">Steps This Week</p>
                 <div className="flex items-end justify-between gap-2">
                   {getWeeklyChartData().map((day) => {
                     const maxSteps = Math.max(...getWeeklyChartData().map((d) => d.steps), 1);
@@ -284,7 +284,7 @@ export default function ActivityPage() {
                         <div
                           className={cn(
                             'w-full rounded-t-md transition-all',
-                            day.isToday ? 'bg-primary' : 'bg-gray-200'
+                            day.isToday ? 'bg-primary' : 'bg-gray-200 dark:bg-gray-700'
                           )}
                           style={{ height: `${heightPercent}px`, minHeight: '4px', maxHeight: '80px' }}
                         />
@@ -303,7 +303,7 @@ export default function ActivityPage() {
           <section>
             <div className="mb-4 flex items-center gap-2">
               <Calendar className="h-5 w-5 text-primary" />
-              <h2 className="text-lg font-bold text-gray-900">Recent Activity</h2>
+              <h2 className="text-lg font-bold text-gray-900 dark:text-white">Recent Activity</h2>
             </div>
 
             {history.length > 0 ? (
@@ -316,13 +316,13 @@ export default function ActivityPage() {
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.2, delay: index * 0.03 }}
-                      className="flex items-center gap-4 rounded-xl bg-white p-4 shadow-sm"
+                      className="flex items-center gap-4 rounded-xl bg-white dark:bg-gray-900 p-4 shadow-sm"
                     >
                       <div className={cn('flex h-10 w-10 items-center justify-center rounded-lg', config.iconBg)}>
                         <config.icon className={cn('h-5 w-5', config.iconColor)} />
                       </div>
                       <div className="flex-1">
-                        <p className="text-sm font-medium text-gray-900">
+                        <p className="text-sm font-medium text-gray-900 dark:text-white">
                           {formatActivityType(item.type)}
                         </p>
                         <p className="text-xs text-muted">
@@ -330,7 +330,7 @@ export default function ActivityPage() {
                         </p>
                       </div>
                       <div className="text-right">
-                        <p className="text-sm font-bold text-gray-900">
+                        <p className="text-sm font-bold text-gray-900 dark:text-white">
                           {Math.round(item.value).toLocaleString()}
                         </p>
                         <p className="text-xs text-muted">{item.unit || config.unit}</p>
@@ -340,7 +340,7 @@ export default function ActivityPage() {
                 })}
               </div>
             ) : (
-              <div className="flex flex-col items-center justify-center rounded-xl bg-white py-12 shadow-sm">
+              <div className="flex flex-col items-center justify-center rounded-xl bg-white dark:bg-gray-900 py-12 shadow-sm">
                 <TrendingUp className="mb-3 h-10 w-10 text-gray-300" />
                 <p className="text-sm text-muted">No activity logged yet. Start tracking!</p>
               </div>
@@ -355,15 +355,15 @@ export default function ActivityPage() {
           <motion.div
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
-            className="w-full max-w-sm rounded-xl bg-white p-6 shadow-lg"
+            className="w-full max-w-sm rounded-xl bg-white dark:bg-gray-900 p-6 shadow-lg"
           >
             <div className="mb-4 flex items-center justify-between">
-              <h3 className="text-lg font-bold text-gray-900">
+              <h3 className="text-lg font-bold text-gray-900 dark:text-white">
                 Log {formatActivityType(logModal)}
               </h3>
               <button
                 onClick={() => setLogModal(null)}
-                className="rounded-lg p-1 text-muted hover:bg-gray-100"
+                className="rounded-lg p-1 text-muted hover:bg-gray-100 dark:hover:bg-gray-800"
               >
                 <X className="h-5 w-5" />
               </button>
@@ -383,7 +383,7 @@ export default function ActivityPage() {
                           'rounded-full px-4 py-2 text-sm font-medium transition-colors',
                           logValue === val
                             ? 'bg-primary text-white'
-                            : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                            : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
                         )}
                       >
                         {val.toLocaleString()}
@@ -392,7 +392,7 @@ export default function ActivityPage() {
                   </div>
 
                   <div className="mb-6">
-                    <label className="mb-1.5 block text-sm font-medium text-gray-700">
+                    <label className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-300">
                       Custom Value ({config?.unit})
                     </label>
                     <input
@@ -401,7 +401,7 @@ export default function ActivityPage() {
                       onChange={(e) => setLogValue(parseFloat(e.target.value) || 0)}
                       min={0}
                       step={logModal === 'WATER' ? 1 : logModal === 'STEPS' ? 100 : 1}
-                      className="w-full rounded-lg border border-border bg-white px-4 py-2.5 text-sm text-gray-900 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+                      className="w-full rounded-lg border border-border bg-white dark:bg-gray-800 px-4 py-2.5 text-sm text-gray-900 dark:text-white focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                     />
                   </div>
                 </>
@@ -411,7 +411,7 @@ export default function ActivityPage() {
             <div className="flex gap-3">
               <button
                 onClick={() => setLogModal(null)}
-                className="flex-1 rounded-lg border border-border bg-white px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50"
+                className="flex-1 rounded-lg border border-border bg-white dark:bg-gray-800 px-4 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700"
               >
                 Cancel
               </button>

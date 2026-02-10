@@ -82,7 +82,7 @@ export default function WorkoutsPage() {
         transition={{ duration: 0.3 }}
         className="mb-6"
       >
-        <h1 className="text-2xl font-bold text-gray-900 sm:text-3xl">Workout Library</h1>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white sm:text-3xl">Workout Library</h1>
         <p className="mt-1 text-sm text-muted">
           {total > 0 ? `${total} workouts available` : 'Discover workouts for every level'}
         </p>
@@ -96,7 +96,7 @@ export default function WorkoutsPage() {
           placeholder="Search workouts..."
           value={searchInput}
           onChange={(e) => handleSearchChange(e.target.value)}
-          className="w-full rounded-xl border border-border bg-white py-3 pl-10 pr-4 text-sm text-gray-900 placeholder:text-muted focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+          className="w-full rounded-xl border border-border bg-white dark:bg-gray-900 py-3 pl-10 pr-4 text-sm text-gray-900 dark:text-white placeholder:text-muted focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
         />
       </div>
 
@@ -110,7 +110,7 @@ export default function WorkoutsPage() {
               'rounded-full px-4 py-2 text-sm font-medium transition-colors',
               difficulty === diff.value
                 ? 'bg-primary text-white'
-                : 'bg-white text-gray-700 hover:bg-gray-100'
+                : 'bg-white text-gray-700 hover:bg-gray-100 dark:bg-gray-900 dark:text-gray-300 dark:hover:bg-gray-800'
             )}
           >
             {diff.label}
@@ -132,9 +132,9 @@ export default function WorkoutsPage() {
           ))}
         </div>
       ) : (
-        <div className="flex flex-col items-center justify-center rounded-xl bg-white py-16 shadow-sm">
+        <div className="flex flex-col items-center justify-center rounded-xl bg-white dark:bg-gray-900 py-16 shadow-sm">
           <Dumbbell className="mb-4 h-12 w-12 text-gray-300" />
-          <h3 className="text-lg font-semibold text-gray-900">No workouts found</h3>
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">No workouts found</h3>
           <p className="mt-1 text-sm text-muted">
             Try adjusting your search or filters
           </p>
@@ -150,8 +150,8 @@ export default function WorkoutsPage() {
             className={cn(
               'flex items-center gap-1 rounded-lg px-4 py-2 text-sm font-medium transition-colors',
               page <= 1
-                ? 'cursor-not-allowed bg-gray-100 text-gray-400'
-                : 'bg-white text-gray-700 hover:bg-gray-100 shadow-sm'
+                ? 'cursor-not-allowed bg-gray-100 text-gray-400 dark:bg-gray-800 dark:text-gray-500'
+                : 'bg-white text-gray-700 hover:bg-gray-100 shadow-sm dark:bg-gray-900 dark:text-gray-300 dark:hover:bg-gray-800'
             )}
           >
             <ChevronLeft className="h-4 w-4" />
@@ -168,8 +168,8 @@ export default function WorkoutsPage() {
             className={cn(
               'flex items-center gap-1 rounded-lg px-4 py-2 text-sm font-medium transition-colors',
               page >= totalPages
-                ? 'cursor-not-allowed bg-gray-100 text-gray-400'
-                : 'bg-white text-gray-700 hover:bg-gray-100 shadow-sm'
+                ? 'cursor-not-allowed bg-gray-100 text-gray-400 dark:bg-gray-800 dark:text-gray-500'
+                : 'bg-white text-gray-700 hover:bg-gray-100 shadow-sm dark:bg-gray-900 dark:text-gray-300 dark:hover:bg-gray-800'
             )}
           >
             Next

@@ -72,7 +72,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
+      <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto" role="navigation" aria-label="Admin navigation">
         {navigation.map((item) => {
           const isActive = pathname === item.href;
           return (
@@ -80,6 +80,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               key={item.name}
               href={item.href}
               onClick={() => setSidebarOpen(false)}
+              aria-current={isActive ? 'page' : undefined}
               className={cn(
                 'flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors',
                 isActive
@@ -126,6 +127,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <div
             className="fixed inset-0 z-40 bg-black/50 lg:hidden"
             onClick={() => setSidebarOpen(false)}
+            aria-hidden="true"
           />
         )}
 
@@ -140,6 +142,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <button
             className="absolute top-4 right-3 lg:hidden text-gray-400 hover:text-white"
             onClick={() => setSidebarOpen(false)}
+            aria-label="Close sidebar"
           >
             <X className="h-5 w-5" />
           </button>
@@ -155,6 +158,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               <button
                 className="lg:hidden mr-4 text-gray-600 hover:text-gray-900"
                 onClick={() => setSidebarOpen(true)}
+                aria-label="Open sidebar menu"
               >
                 <Menu className="h-6 w-6" />
               </button>

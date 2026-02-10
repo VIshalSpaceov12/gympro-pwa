@@ -7,6 +7,7 @@
   "background_color": "#ffffff",
   "theme_color": "#6366f1",
   "orientation": "portrait-primary",
+  "categories": ["fitness", "health", "lifestyle"],
   "icons": [
     {
       "src": "/icons/icon-192x192.png",
@@ -23,6 +24,57 @@
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
+    }
+  ],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "Workouts",
+      "short_name": "Workouts",
+      "description": "Browse workout videos",
+      "url": "/workouts",
+      "icons": [
+        {
+          "src": "/icons/icon-192x192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Activity",
+      "short_name": "Activity",
+      "description": "Track your daily activity",
+      "url": "/activity",
+      "icons": [
+        {
+          "src": "/icons/icon-192x192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Nutrition",
+      "short_name": "Nutrition",
+      "description": "Plan and track your meals",
+      "url": "/nutrition",
+      "icons": [
+        {
+          "src": "/icons/icon-192x192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Community",
+      "short_name": "Community",
+      "description": "Connect with fitness community",
+      "url": "/community",
+      "icons": [
+        {
+          "src": "/icons/icon-192x192.png",
+          "sizes": "192x192"
+        }
+      ]
     }
   ]
 }

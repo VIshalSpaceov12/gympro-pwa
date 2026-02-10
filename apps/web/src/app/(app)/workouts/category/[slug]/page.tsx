@@ -50,7 +50,7 @@ export default function CategoryPage() {
       {/* Back button */}
       <Link
         href="/workouts"
-        className="mb-6 inline-flex items-center gap-2 text-sm font-medium text-muted transition-colors hover:text-gray-900"
+        className="mb-6 inline-flex items-center gap-2 text-sm font-medium text-muted transition-colors hover:text-gray-900 dark:hover:text-white"
       >
         <ArrowLeft className="h-4 w-4" />
         Back to Workouts
@@ -59,8 +59,8 @@ export default function CategoryPage() {
       {/* Header */}
       {loading ? (
         <div className="mb-6">
-          <div className="h-8 w-48 animate-pulse rounded bg-gray-200" />
-          <div className="mt-2 h-4 w-80 animate-pulse rounded bg-gray-200" />
+          <div className="h-8 w-48 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
+          <div className="mt-2 h-4 w-80 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
         </div>
       ) : category ? (
         <motion.div
@@ -69,7 +69,7 @@ export default function CategoryPage() {
           transition={{ duration: 0.3 }}
           className="mb-6"
         >
-          <h1 className="text-2xl font-bold text-gray-900 sm:text-3xl">{category.name}</h1>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white sm:text-3xl">{category.name}</h1>
           {category.description && (
             <p className="mt-2 text-sm text-muted">{category.description}</p>
           )}
@@ -79,9 +79,9 @@ export default function CategoryPage() {
 
       {/* Error State */}
       {error && (
-        <div className="flex flex-col items-center justify-center rounded-xl bg-white py-16 shadow-sm">
+        <div className="flex flex-col items-center justify-center rounded-xl bg-white py-16 shadow-sm dark:bg-gray-900">
           <Dumbbell className="mb-4 h-12 w-12 text-gray-300" />
-          <h3 className="text-lg font-semibold text-gray-900">{error}</h3>
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{error}</h3>
           <Link href="/workouts" className="mt-3 text-sm font-medium text-primary hover:underline">
             Browse all workouts
           </Link>
@@ -102,9 +102,9 @@ export default function CategoryPage() {
           ))}
         </div>
       ) : category && category.videos.length === 0 ? (
-        <div className="flex flex-col items-center justify-center rounded-xl bg-white py-16 shadow-sm">
+        <div className="flex flex-col items-center justify-center rounded-xl bg-white py-16 shadow-sm dark:bg-gray-900">
           <Dumbbell className="mb-4 h-12 w-12 text-gray-300" />
-          <h3 className="text-lg font-semibold text-gray-900">No workouts yet</h3>
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">No workouts yet</h3>
           <p className="mt-1 text-sm text-muted">
             This category doesn&apos;t have any workouts yet. Check back soon!
           </p>

@@ -10,7 +10,7 @@ export default function AuthLayout({
           <h1 className="text-4xl font-bold text-white">GymProLuxe</h1>
           <p className="text-white/80 mt-2 text-sm">Your Fitness Journey Starts Here</p>
         </div>
-        <div className="bg-white rounded-xl shadow-lg p-8">
+        <div className="bg-white dark:bg-gray-900 rounded-xl shadow-lg p-8">
           {children}
         </div>
       </div>

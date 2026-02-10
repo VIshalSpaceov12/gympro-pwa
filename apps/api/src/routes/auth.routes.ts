@@ -1,8 +1,8 @@
 import { Router } from 'express';
 import { rateLimit } from 'express-rate-limit';
-import { loginSchema, registerSchema, forgotPasswordSchema, resetPasswordSchema } from '@gympro/shared';
+import { loginSchema, registerSchema, forgotPasswordSchema, resetPasswordSchema, updateProfileSchema, changePasswordSchema } from '@gympro/shared';
 import { validate } from '../middleware/validate.js';
-import { authenticate } from '../middleware/auth.js';
+import { authenticate, requireRole } from '../middleware/auth.js';
 import {
   register,
   login,
@@ -10,6 +10,9 @@ import {
   getMe,
   forgotPassword,
   resetPassword,
+  updateProfile,
+  changePassword,
+  getAdminStats,
 } from '../controllers/auth.controller.js';
 
 const router = Router();
@@ -29,5 +32,8 @@ router.post('/refresh-token', refreshToken);
 router.post('/forgot-password', authLimiter, validate(forgotPasswordSchema), forgotPassword);
 router.post('/reset-password', validate(resetPasswordSchema), resetPassword);
 router.get('/me', authenticate, getMe);
+router.put('/profile', authenticate, validate(updateProfileSchema), updateProfile);
+router.put('/change-password', authenticate, validate(changePasswordSchema), changePassword);
+router.get('/admin/stats', authenticate, requireRole('ADMIN'), getAdminStats);
 
 export default router;

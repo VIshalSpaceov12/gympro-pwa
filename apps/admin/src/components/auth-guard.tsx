@@ -58,7 +58,7 @@ export function AuthGuard({ children }: AuthGuardProps) {
 
   if (!hydrated || isChecking || isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="min-h-screen flex items-center justify-center bg-gray-50" role="status" aria-label="Verifying access">
         <div className="flex flex-col items-center gap-3">
           <Loader2 className="h-8 w-8 animate-spin text-primary" />
           <p className="text-sm text-muted">Verifying access...</p>

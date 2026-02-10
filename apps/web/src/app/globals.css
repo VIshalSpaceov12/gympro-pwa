@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+/* Enable class-based dark mode (Tailwind v4 uses media query by default) */
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
   --color-primary: #6366f1;
   --color-primary-dark: #4f46e5;
@@ -10,4 +13,13 @@
   --color-muted: #6b7280;
   --color-border: #e5e7eb;
   --font-sans: "Inter", system-ui, sans-serif;
+}
+
+/* Dark mode overrides */
+html.dark {
+  --color-background: #0a0a0a;
+  --color-foreground: #fafafa;
+  --color-muted: #9ca3af;
+  --color-border: #374151;
+  color-scheme: dark;
 }

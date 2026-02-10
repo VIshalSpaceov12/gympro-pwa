@@ -22,9 +22,9 @@ interface VideoCardProps {
 }
 
 const difficultyConfig: Record<string, { label: string; className: string }> = {
-  BEGINNER: { label: 'Beginner', className: 'bg-green-100 text-green-700' },
-  INTERMEDIATE: { label: 'Intermediate', className: 'bg-yellow-100 text-yellow-700' },
-  ADVANCED: { label: 'Advanced', className: 'bg-red-100 text-red-700' },
+  BEGINNER: { label: 'Beginner', className: 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' },
+  INTERMEDIATE: { label: 'Intermediate', className: 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400' },
+  ADVANCED: { label: 'Advanced', className: 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400' },
 };
 
 export function VideoCard({ video, className }: VideoCardProps) {
@@ -34,7 +34,7 @@ export function VideoCard({ video, className }: VideoCardProps) {
     <Link
       href={`/workouts/${video.id}`}
       className={cn(
-        'group block overflow-hidden rounded-xl bg-white shadow-sm transition-all duration-200 hover:shadow-md hover:scale-[1.02]',
+        'group block overflow-hidden rounded-xl bg-white dark:bg-gray-900 shadow-sm transition-all duration-200 hover:shadow-md hover:scale-[1.02]',
         className
       )}
     >
@@ -74,7 +74,7 @@ export function VideoCard({ video, className }: VideoCardProps) {
         </span>
 
         {/* Title */}
-        <h3 className="mt-2 line-clamp-2 text-sm font-semibold text-gray-900">
+        <h3 className="mt-2 line-clamp-2 text-sm font-semibold text-gray-900 dark:text-white">
           {video.title}
         </h3>
 
@@ -95,15 +95,15 @@ export function VideoCard({ video, className }: VideoCardProps) {
 
 export function VideoCardSkeleton() {
   return (
-    <div className="overflow-hidden rounded-xl bg-white shadow-sm">
-      <div className="aspect-video w-full animate-pulse bg-gray-200" />
+    <div className="overflow-hidden rounded-xl bg-white dark:bg-gray-900 shadow-sm">
+      <div className="aspect-video w-full animate-pulse bg-gray-200 dark:bg-gray-700" />
       <div className="p-3">
-        <div className="h-5 w-20 animate-pulse rounded-full bg-gray-200" />
-        <div className="mt-2 h-4 w-full animate-pulse rounded bg-gray-200" />
-        <div className="mt-1 h-4 w-2/3 animate-pulse rounded bg-gray-200" />
+        <div className="h-5 w-20 animate-pulse rounded-full bg-gray-200 dark:bg-gray-700" />
+        <div className="mt-2 h-4 w-full animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
+        <div className="mt-1 h-4 w-2/3 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
         <div className="mt-2 flex justify-between">
-          <div className="h-3 w-16 animate-pulse rounded bg-gray-200" />
-          <div className="h-3 w-12 animate-pulse rounded bg-gray-200" />
+          <div className="h-3 w-16 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
+          <div className="h-3 w-12 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
         </div>
       </div>
     </div>

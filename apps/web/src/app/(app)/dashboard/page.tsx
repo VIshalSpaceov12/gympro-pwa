@@ -95,7 +95,7 @@ export default function DashboardPage() {
         transition={{ duration: 0.3 }}
         className="mb-8"
       >
-        <h1 className="text-2xl font-bold text-gray-900 sm:text-3xl">
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white sm:text-3xl">
           Welcome back, {user?.firstName}!
         </h1>
         <p className="mt-1 text-sm text-muted">
@@ -107,12 +107,12 @@ export default function DashboardPage() {
       <div className="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
         {loading
           ? Array.from({ length: 3 }).map((_, i) => (
-              <div key={i} className="rounded-xl bg-white p-5 shadow-sm">
+              <div key={i} className="rounded-xl bg-white p-5 shadow-sm dark:bg-gray-900">
                 <div className="flex items-center gap-3">
-                  <div className="h-10 w-10 animate-pulse rounded-lg bg-gray-200" />
+                  <div className="h-10 w-10 animate-pulse rounded-lg bg-gray-200 dark:bg-gray-700" />
                   <div className="flex-1">
-                    <div className="h-3 w-20 animate-pulse rounded bg-gray-200" />
-                    <div className="mt-2 h-6 w-12 animate-pulse rounded bg-gray-200" />
+                    <div className="h-3 w-20 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
+                    <div className="mt-2 h-6 w-12 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
                   </div>
                 </div>
               </div>
@@ -123,7 +123,7 @@ export default function DashboardPage() {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3 }}
-                className="rounded-xl bg-white p-5 shadow-sm"
+                className="rounded-xl bg-white p-5 shadow-sm dark:bg-gray-900"
               >
                 <div className="flex items-center gap-3">
                   <div className={`flex h-10 w-10 items-center justify-center rounded-lg ${stat.iconBg}`}>
@@ -131,7 +131,7 @@ export default function DashboardPage() {
                   </div>
                   <div>
                     <p className="text-xs font-medium text-muted">{stat.label}</p>
-                    <p className="text-xl font-bold text-gray-900">{stat.value}</p>
+                    <p className="text-xl font-bold text-gray-900 dark:text-white">{stat.value}</p>
                   </div>
                 </div>
               </motion.div>
@@ -141,7 +141,7 @@ export default function DashboardPage() {
       {/* Continue Training */}
       <section className="mb-8">
         <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-lg font-bold text-gray-900">Continue Training</h2>
+          <h2 className="text-lg font-bold text-gray-900 dark:text-white">Continue Training</h2>
           <Link
             href="/workouts"
             className="flex items-center gap-1 text-sm font-medium text-primary hover:underline"
@@ -164,7 +164,7 @@ export default function DashboardPage() {
             ))}
           </div>
         ) : (
-          <div className="rounded-xl bg-white p-8 text-center shadow-sm">
+          <div className="rounded-xl bg-white p-8 text-center shadow-sm dark:bg-gray-900">
             <Dumbbell className="mx-auto mb-3 h-10 w-10 text-gray-300" />
             <p className="text-sm text-muted">No workouts available yet. Check back soon!</p>
           </div>
@@ -174,13 +174,13 @@ export default function DashboardPage() {
       {/* Browse Categories */}
       <section>
         <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-lg font-bold text-gray-900">Browse Categories</h2>
+          <h2 className="text-lg font-bold text-gray-900 dark:text-white">Browse Categories</h2>
         </div>
 
         {loading ? (
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
             {Array.from({ length: 4 }).map((_, i) => (
-              <div key={i} className="aspect-[4/3] animate-pulse rounded-xl bg-gray-200" />
+              <div key={i} className="aspect-[4/3] animate-pulse rounded-xl bg-gray-200 dark:bg-gray-700" />
             ))}
           </div>
         ) : categories.length > 0 ? (
@@ -218,7 +218,7 @@ export default function DashboardPage() {
             ))}
           </div>
         ) : (
-          <div className="rounded-xl bg-white p-8 text-center shadow-sm">
+          <div className="rounded-xl bg-white p-8 text-center shadow-sm dark:bg-gray-900">
             <p className="text-sm text-muted">No categories available yet.</p>
           </div>
         )}

@@ -220,6 +220,162 @@ export async function forgotPassword(req: Request, res: Response): Promise<void>
   }
 }
 
+// PUT /api/auth/profile
+export async function updateProfile(req: Request, res: Response): Promise<void> {
+  try {
+    if (!req.user) {
+      sendError(res, 'Not authenticated', 401);
+      return;
+    }
+
+    const { firstName, lastName, avatarUrl, bio, dateOfBirth, gender, height, weight, fitnessGoal, experienceLevel } = req.body;
+
+    // Update user fields
+    const userData: Record<string, unknown> = {};
+    if (firstName !== undefined) userData.firstName = firstName;
+    if (lastName !== undefined) userData.lastName = lastName;
+    if (avatarUrl !== undefined) userData.avatarUrl = avatarUrl || null;
+
+    // Update profile fields
+    const profileData: Record<string, unknown> = {};
+    if (bio !== undefined) profileData.bio = bio || null;
+    if (dateOfBirth !== undefined) profileData.dateOfBirth = dateOfBirth ? new Date(dateOfBirth) : null;
+    if (gender !== undefined) profileData.gender = gender || null;
+    if (height !== undefined) profileData.height = height;
+    if (weight !== undefined) profileData.weight = weight;
+    if (fitnessGoal !== undefined) profileData.fitnessGoal = fitnessGoal || null;
+    if (experienceLevel !== undefined) profileData.experienceLevel = experienceLevel || null;
+
+    const user = await prisma.user.update({
+      where: { id: req.user.userId },
+      data: {
+        ...userData,
+        ...(Object.keys(profileData).length > 0
+          ? {
+              profile: {
+                upsert: {
+                  create: profileData,
+                  update: profileData,
+                },
+              },
+            }
+          : {}),
+      },
+      select: {
+        id: true,
+        email: true,
+        firstName: true,
+        lastName: true,
+        avatarUrl: true,
+        role: true,
+        subscriptionStatus: true,
+        isActive: true,
+        emailVerified: true,
+        createdAt: true,
+        profile: {
+          select: {
+            bio: true,
+            dateOfBirth: true,
+            gender: true,
+            height: true,
+            weight: true,
+            fitnessGoal: true,
+            experienceLevel: true,
+          },
+        },
+      },
+    });
+
+    sendSuccess(res, user);
+  } catch (error) {
+    console.error('Update profile error:', error);
+    sendError(res, 'Failed to update profile', 500);
+  }
+}
+
+// PUT /api/auth/change-password
+export async function changePassword(req: Request, res: Response): Promise<void> {
+  try {
+    if (!req.user) {
+      sendError(res, 'Not authenticated', 401);
+      return;
+    }
+
+    const { currentPassword, newPassword } = req.body;
+
+    // Find user
+    const user = await prisma.user.findUnique({
+      where: { id: req.user.userId },
+      select: { id: true, passwordHash: true },
+    });
+
+    if (!user) {
+      sendError(res, 'User not found', 404);
+      return;
+    }
+
+    // Verify current password
+    const isValid = await comparePassword(currentPassword, user.passwordHash);
+    if (!isValid) {
+      sendError(res, 'Current password is incorrect', 400);
+      return;
+    }
+
+    // Hash and update new password
+    const passwordHash = await hashPassword(newPassword);
+    await prisma.user.update({
+      where: { id: user.id },
+      data: { passwordHash },
+    });
+
+    sendSuccess(res, { message: 'Password changed successfully' });
+  } catch (error) {
+    console.error('Change password error:', error);
+    sendError(res, 'Failed to change password', 500);
+  }
+}
+
+// GET /api/auth/admin/stats
+export async function getAdminStats(req: Request, res: Response): Promise<void> {
+  try {
+    if (!req.user) {
+      sendError(res, 'Not authenticated', 401);
+      return;
+    }
+
+    const now = new Date();
+    const oneWeekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+
+    const [
+      totalUsers,
+      activeUsers,
+      newUsersThisWeek,
+      totalPosts,
+      totalWorkoutSessions,
+      totalProducts,
+    ] = await Promise.all([
+      prisma.user.count(),
+      prisma.user.count({ where: { isActive: true } }),
+      prisma.user.count({ where: { createdAt: { gte: oneWeekAgo } } }),
+      prisma.post.count(),
+      prisma.workoutSession.count(),
+      prisma.product.count(),
+    ]);
+
+    sendSuccess(res, {
+      totalUsers,
+      activeUsers,
+      newUsersThisWeek,
+      totalPosts,
+      totalWorkoutSessions,
+      totalProducts,
+    });
+  } catch (error) {
+    console.error('Admin stats error:', error);
+    sendError(res, 'Failed to fetch admin stats', 500);
+  }
+}
+
 // POST /api/auth/reset-password
 export async function resetPassword(req: Request, res: Response): Promise<void> {
   try {

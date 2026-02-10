@@ -11,6 +11,10 @@ import {
   Clock,
   Tag,
   BarChart3,
+  UserPlus,
+  MessageSquare,
+  Activity,
+  ShoppingBag,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { Difficulty } from '@gympro/shared';
@@ -47,6 +51,15 @@ interface PaginatedVideos {
   totalPages: number;
 }
 
+interface AdminStats {
+  totalUsers: number;
+  activeUsers: number;
+  newUsersThisWeek: number;
+  totalPosts: number;
+  totalWorkoutSessions: number;
+  totalProducts: number;
+}
+
 function formatDuration(seconds: number): string {
   const mins = Math.floor(seconds / 60);
   const secs = seconds % 60;
@@ -63,14 +76,16 @@ export default function DashboardPage() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [videos, setVideos] = useState<Video[]>([]);
   const [totalVideos, setTotalVideos] = useState(0);
+  const [adminStats, setAdminStats] = useState<AdminStats | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [catResult, vidResult] = await Promise.all([
+        const [catResult, vidResult, statsResult] = await Promise.all([
           apiClient<Category[]>('/api/workouts/categories'),
           apiClient<PaginatedVideos>('/api/workouts/videos?page=1&limit=5'),
+          apiClient<AdminStats>('/api/auth/admin/stats').catch(() => ({ success: false, data: undefined })),
         ]);
 
         if (catResult.success && catResult.data) {
@@ -79,6 +94,9 @@ export default function DashboardPage() {
         if (vidResult.success && vidResult.data) {
           setVideos(vidResult.data.data);
           setTotalVideos(vidResult.data.total);
+        }
+        if (statsResult.success && statsResult.data) {
+          setAdminStats(statsResult.data);
         }
       } catch {
         // silently handle - data just won't load
@@ -95,7 +113,7 @@ export default function DashboardPage() {
   const stats = [
     {
       label: 'Total Users',
-      value: '\u2014',
+      value: adminStats?.totalUsers ?? '\u2014',
       icon: Users,
       color: 'border-l-blue-500',
       iconBg: 'bg-blue-100 text-blue-600',
@@ -115,9 +133,9 @@ export default function DashboardPage() {
       iconBg: 'bg-purple-100 text-purple-600',
     },
     {
-      label: 'Total Views',
-      value: '\u2014',
-      icon: Eye,
+      label: 'Workout Sessions',
+      value: adminStats?.totalWorkoutSessions ?? '\u2014',
+      icon: Activity,
       color: 'border-l-amber-500',
       iconBg: 'bg-amber-100 text-amber-600',
     },
@@ -155,6 +173,52 @@ export default function DashboardPage() {
           </div>
         ))}
       </div>
+
+      {/* Growth & Content Stats */}
+      {adminStats && (
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-5">
+            <div className="flex items-center gap-3 mb-2">
+              <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-indigo-100 text-indigo-600">
+                <UserPlus className="h-5 w-5" />
+              </div>
+              <div>
+                <p className="text-sm text-gray-500">New This Week</p>
+                <p className="text-xl font-bold text-gray-900">{adminStats.newUsersThisWeek}</p>
+              </div>
+            </div>
+            <p className="text-xs text-gray-400">
+              {adminStats.activeUsers} of {adminStats.totalUsers} users active
+            </p>
+          </div>
+
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-5">
+            <div className="flex items-center gap-3 mb-2">
+              <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-pink-100 text-pink-600">
+                <MessageSquare className="h-5 w-5" />
+              </div>
+              <div>
+                <p className="text-sm text-gray-500">Community Posts</p>
+                <p className="text-xl font-bold text-gray-900">{adminStats.totalPosts}</p>
+              </div>
+            </div>
+            <p className="text-xs text-gray-400">Total posts created</p>
+          </div>
+
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-5">
+            <div className="flex items-center gap-3 mb-2">
+              <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-emerald-100 text-emerald-600">
+                <ShoppingBag className="h-5 w-5" />
+              </div>
+              <div>
+                <p className="text-sm text-gray-500">Products</p>
+                <p className="text-xl font-bold text-gray-900">{adminStats.totalProducts}</p>
+              </div>
+            </div>
+            <p className="text-xs text-gray-400">Total products in shop</p>
+          </div>
+        </div>
+      )}
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Recent Videos */}

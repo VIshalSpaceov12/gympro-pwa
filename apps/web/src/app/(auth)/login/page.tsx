@@ -41,11 +41,11 @@ export default function LoginPage() {
 
   return (
     <div>
-      <h2 className="text-2xl font-bold text-gray-900 mb-1">Welcome back</h2>
+      <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-1">Welcome back</h2>
       <p className="text-sm text-muted mb-6">Sign in to your account to continue</p>
 
       {serverError && (
-        <div className="mb-4 rounded-lg bg-red-50 border border-red-200 p-3 text-sm text-red-600">
+        <div className="mb-4 rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 p-3 text-sm text-red-600 dark:text-red-400">
           {serverError}
         </div>
       )}
@@ -53,7 +53,7 @@ export default function LoginPage() {
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         {/* Email field */}
         <div>
-          <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
             Email
           </label>
           <div className="relative">
@@ -64,7 +64,7 @@ export default function LoginPage() {
               autoComplete="email"
               placeholder="you@example.com"
               className={cn(
-                'w-full rounded-lg border bg-white py-2.5 pl-10 pr-4 text-sm outline-none transition-colors',
+                'w-full rounded-lg border bg-white dark:bg-gray-800 py-2.5 pl-10 pr-4 text-sm text-gray-900 dark:text-white outline-none transition-colors',
                 'focus:border-primary focus:ring-2 focus:ring-primary/20',
                 errors.email ? 'border-red-500' : 'border-border'
               )}
@@ -78,7 +78,7 @@ export default function LoginPage() {
 
         {/* Password field */}
         <div>
-          <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
             Password
           </label>
           <div className="relative">
@@ -89,7 +89,7 @@ export default function LoginPage() {
               autoComplete="current-password"
               placeholder="Enter your password"
               className={cn(
-                'w-full rounded-lg border bg-white py-2.5 pl-10 pr-10 text-sm outline-none transition-colors',
+                'w-full rounded-lg border bg-white dark:bg-gray-800 py-2.5 pl-10 pr-10 text-sm text-gray-900 dark:text-white outline-none transition-colors',
                 'focus:border-primary focus:ring-2 focus:ring-primary/20',
                 errors.password ? 'border-red-500' : 'border-border'
               )}
@@ -98,8 +98,9 @@ export default function LoginPage() {
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
               tabIndex={-1}
+              aria-label={showPassword ? 'Hide password' : 'Show password'}
             >
               {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
             </button>
@@ -111,7 +112,7 @@ export default function LoginPage() {
 
         {/* Remember me + Forgot password */}
         <div className="flex items-center justify-between">
-          <label className="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
+          <label className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 cursor-pointer">
             <input
               type="checkbox"
               checked={rememberMe}

@@ -58,7 +58,7 @@ export default function MyWorkoutsPage() {
         className="mb-6 flex items-center justify-between"
       >
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 sm:text-3xl">My Workouts</h1>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white sm:text-3xl">My Workouts</h1>
           <p className="mt-1 text-sm text-muted">
             {workouts.length > 0
               ? `${workouts.length} custom workout${workouts.length !== 1 ? 's' : ''}`
@@ -82,7 +82,7 @@ export default function MyWorkoutsPage() {
           <p className="mt-3 text-sm text-muted">Loading your workouts...</p>
         </div>
       ) : error ? (
-        <div className="rounded-xl bg-white p-8 text-center shadow-sm">
+        <div className="rounded-xl bg-white dark:bg-gray-900 p-8 text-center shadow-sm">
           <p className="text-sm text-red-600">{error}</p>
           <button
             onClick={fetchWorkouts}
@@ -102,11 +102,11 @@ export default function MyWorkoutsPage() {
             >
               <Link
                 href={`/my-workouts/${workout.id}`}
-                className="group block rounded-xl bg-white p-5 shadow-sm transition-all hover:shadow-md"
+                className="group block rounded-xl bg-white dark:bg-gray-900 p-5 shadow-sm transition-all hover:shadow-md"
               >
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
-                    <h3 className="text-base font-semibold text-gray-900 group-hover:text-primary transition-colors">
+                    <h3 className="text-base font-semibold text-gray-900 dark:text-white group-hover:text-primary transition-colors">
                       {workout.name}
                     </h3>
                     {workout.description && (
@@ -128,7 +128,7 @@ export default function MyWorkoutsPage() {
                     {new Date(workout.createdAt).toLocaleDateString()}
                   </span>
                   {workout.isPublic && (
-                    <span className="rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-700">
+                    <span className="rounded-full bg-green-100 dark:bg-green-900/30 px-2 py-0.5 text-xs font-medium text-green-700 dark:text-green-400">
                       Public
                     </span>
                   )}
@@ -138,9 +138,9 @@ export default function MyWorkoutsPage() {
           ))}
         </div>
       ) : (
-        <div className="flex flex-col items-center justify-center rounded-xl bg-white py-16 shadow-sm">
+        <div className="flex flex-col items-center justify-center rounded-xl bg-white dark:bg-gray-900 py-16 shadow-sm">
           <Dumbbell className="mb-4 h-12 w-12 text-gray-300" />
-          <h3 className="text-lg font-semibold text-gray-900">No custom workouts yet</h3>
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">No custom workouts yet</h3>
           <p className="mt-1 text-sm text-muted">
             Create your first custom workout routine
           </p>

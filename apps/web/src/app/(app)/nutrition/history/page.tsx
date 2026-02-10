@@ -167,12 +167,12 @@ export default function NutritionHistoryPage() {
       >
         <button
           onClick={() => router.push('/nutrition')}
-          className="mb-4 flex items-center gap-1 text-sm text-muted transition-colors hover:text-gray-900"
+          className="mb-4 flex items-center gap-1 text-sm text-muted transition-colors hover:text-gray-900 dark:hover:text-white"
         >
           <ArrowLeft className="h-4 w-4" />
           Back to Nutrition
         </button>
-        <h1 className="text-2xl font-bold text-gray-900 sm:text-3xl">
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white sm:text-3xl">
           Nutrition History
         </h1>
         <p className="mt-1 text-sm text-muted">
@@ -193,17 +193,17 @@ export default function NutritionHistoryPage() {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3 }}
-              className="mb-6 rounded-xl bg-white p-5 shadow-sm"
+              className="mb-6 rounded-xl bg-white dark:bg-gray-900 p-5 shadow-sm"
             >
               <div className="flex items-center gap-2 mb-4">
                 <TrendingUp className="h-4 w-4 text-primary" />
-                <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide">
+                <h2 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">
                   Weekly Averages
                 </h2>
               </div>
               <div className="grid grid-cols-4 gap-3">
                 <div className="text-center">
-                  <p className="text-xl font-bold text-gray-900">
+                  <p className="text-xl font-bold text-gray-900 dark:text-white">
                     {weeklyAvg.calories}
                   </p>
                   <p className="text-[10px] text-muted uppercase">Calories</p>
@@ -248,14 +248,14 @@ export default function NutritionHistoryPage() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.3, delay: idx * 0.03 }}
                     onClick={() => navigateToDay(entry.date)}
-                    className="flex w-full items-center gap-4 rounded-xl bg-white p-4 shadow-sm transition-all hover:shadow-md text-left"
+                    className="flex w-full items-center gap-4 rounded-xl bg-white dark:bg-gray-900 p-4 shadow-sm transition-all hover:shadow-md text-left"
                   >
                     {/* Date */}
                     <div className="flex flex-col items-center flex-shrink-0 min-w-[50px]">
                       <span className="text-[10px] font-medium text-muted uppercase">
                         {entry.dayOfWeek}
                       </span>
-                      <span className="text-sm font-bold text-gray-900">
+                      <span className="text-sm font-bold text-gray-900 dark:text-white">
                         {entry.displayDate}
                       </span>
                     </div>
@@ -265,7 +265,7 @@ export default function NutritionHistoryPage() {
                       <div className="flex items-center justify-between mb-1.5">
                         <div className="flex items-center gap-1.5">
                           <Flame className="h-3.5 w-3.5 text-orange-500" />
-                          <span className="text-sm font-semibold text-gray-900">
+                          <span className="text-sm font-semibold text-gray-900 dark:text-white">
                             {entry.totalCalories} kcal
                           </span>
                         </div>
@@ -278,7 +278,7 @@ export default function NutritionHistoryPage() {
 
                       {/* Calorie Progress Bar */}
                       {entry.targetCalories && (
-                        <div className="mb-1.5 h-1.5 w-full overflow-hidden rounded-full bg-gray-100">
+                        <div className="mb-1.5 h-1.5 w-full overflow-hidden rounded-full bg-gray-100 dark:bg-gray-700">
                           <div
                             className={cn(
                               'h-full rounded-full transition-all duration-500',
@@ -312,9 +312,9 @@ export default function NutritionHistoryPage() {
               })}
             </div>
           ) : (
-            <div className="flex flex-col items-center justify-center rounded-xl bg-white py-16 shadow-sm">
+            <div className="flex flex-col items-center justify-center rounded-xl bg-white dark:bg-gray-900 py-16 shadow-sm">
               <CalendarDays className="mb-4 h-12 w-12 text-gray-300" />
-              <h3 className="text-lg font-semibold text-gray-900">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
                 No nutrition history
               </h3>
               <p className="mt-1 text-sm text-muted">

@@ -208,12 +208,12 @@ export default function CustomWorkoutDetailPage() {
 
   if (error && !workout) {
     return (
-      <div className="rounded-xl bg-white p-8 text-center shadow-sm">
+      <div className="rounded-xl bg-white dark:bg-gray-900 p-8 text-center shadow-sm">
         <p className="text-sm text-red-600">{error}</p>
         <div className="mt-4 flex justify-center gap-3">
           <Link
             href="/my-workouts"
-            className="rounded-lg bg-gray-100 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-200"
+            className="rounded-lg bg-gray-100 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
           >
             Back to Workouts
           </Link>
@@ -241,7 +241,7 @@ export default function CustomWorkoutDetailPage() {
       >
         <Link
           href="/my-workouts"
-          className="mb-4 inline-flex items-center gap-1 text-sm text-muted hover:text-gray-900 transition-colors"
+          className="mb-4 inline-flex items-center gap-1 text-sm text-muted hover:text-gray-900 dark:hover:text-white transition-colors"
         >
           <ArrowLeft className="h-4 w-4" />
           Back to My Workouts
@@ -254,10 +254,10 @@ export default function CustomWorkoutDetailPage() {
                 type="text"
                 value={editName}
                 onChange={(e) => setEditName(e.target.value)}
-                className="w-full rounded-lg border border-border bg-white px-4 py-2.5 text-2xl font-bold text-gray-900 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+                className="w-full rounded-lg border border-border bg-white dark:bg-gray-800 px-4 py-2.5 text-2xl font-bold text-gray-900 dark:text-white focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
               />
             ) : (
-              <h1 className="text-2xl font-bold text-gray-900 sm:text-3xl">{workout.name}</h1>
+              <h1 className="text-2xl font-bold text-gray-900 dark:text-white sm:text-3xl">{workout.name}</h1>
             )}
             {!editing && workout.description && (
               <p className="mt-1 text-sm text-muted">{workout.description}</p>
@@ -267,7 +267,7 @@ export default function CustomWorkoutDetailPage() {
                 <span>{workout.exercises.length} exercises</span>
                 <span>Created {new Date(workout.createdAt).toLocaleDateString()}</span>
                 {workout.isPublic && (
-                  <span className="rounded-full bg-green-100 px-2 py-0.5 font-medium text-green-700">
+                  <span className="rounded-full bg-green-100 dark:bg-green-900/30 px-2 py-0.5 font-medium text-green-700 dark:text-green-400">
                     Public
                   </span>
                 )}
@@ -279,14 +279,14 @@ export default function CustomWorkoutDetailPage() {
             <div className="ml-4 flex items-center gap-2">
               <button
                 onClick={startEditing}
-                className="flex items-center gap-1.5 rounded-lg bg-gray-100 px-3 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-200"
+                className="flex items-center gap-1.5 rounded-lg bg-gray-100 px-3 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
               >
                 <Pencil className="h-4 w-4" />
                 <span className="hidden sm:inline">Edit</span>
               </button>
               <button
                 onClick={() => setShowDeleteConfirm(true)}
-                className="flex items-center gap-1.5 rounded-lg bg-red-50 px-3 py-2 text-sm font-medium text-red-600 transition-colors hover:bg-red-100"
+                className="flex items-center gap-1.5 rounded-lg bg-red-50 px-3 py-2 text-sm font-medium text-red-600 transition-colors hover:bg-red-100 dark:bg-red-900/20 dark:hover:bg-red-900/30"
               >
                 <Trash2 className="h-4 w-4" />
                 <span className="hidden sm:inline">Delete</span>
@@ -298,23 +298,23 @@ export default function CustomWorkoutDetailPage() {
 
       {/* Error */}
       {error && (
-        <div className="mb-6 rounded-xl bg-red-50 p-4 text-sm text-red-700">
+        <div className="mb-6 rounded-xl bg-red-50 dark:bg-red-900/20 p-4 text-sm text-red-700 dark:text-red-400">
           {error}
         </div>
       )}
 
       {/* Edit mode: description + public toggle */}
       {editing && (
-        <div className="mb-6 rounded-xl bg-white p-5 shadow-sm">
+        <div className="mb-6 rounded-xl bg-white dark:bg-gray-900 p-5 shadow-sm">
           <div className="space-y-4">
             <div>
-              <label className="mb-1.5 block text-sm font-medium text-gray-700">Description</label>
+              <label className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-300">Description</label>
               <textarea
                 value={editDescription}
                 onChange={(e) => setEditDescription(e.target.value)}
                 placeholder="Describe your workout..."
                 rows={3}
-                className="w-full rounded-lg border border-border bg-white px-4 py-2.5 text-sm text-gray-900 placeholder:text-muted focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 resize-none"
+                className="w-full rounded-lg border border-border bg-white dark:bg-gray-800 px-4 py-2.5 text-sm text-gray-900 dark:text-white placeholder:text-muted focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 resize-none"
               />
             </div>
             <div className="flex items-center gap-3">
@@ -325,7 +325,7 @@ export default function CustomWorkoutDetailPage() {
                 onChange={(e) => setEditIsPublic(e.target.checked)}
                 className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
               />
-              <label htmlFor="editIsPublic" className="text-sm text-gray-700">
+              <label htmlFor="editIsPublic" className="text-sm text-gray-700 dark:text-gray-300">
                 Make this workout public
               </label>
             </div>
@@ -337,13 +337,13 @@ export default function CustomWorkoutDetailPage() {
       <div className="mb-6">
         {editing && (
           <div className="mb-4 flex items-center justify-between">
-            <h2 className="text-base font-semibold text-gray-900">
+            <h2 className="text-base font-semibold text-gray-900 dark:text-white">
               Exercises ({editExercises.length})
             </h2>
             <button
               type="button"
               onClick={addExercise}
-              className="flex items-center gap-1.5 rounded-lg bg-gray-100 px-3 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-200"
+              className="flex items-center gap-1.5 rounded-lg bg-gray-100 px-3 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
             >
               <Plus className="h-4 w-4" />
               Add Exercise
@@ -354,14 +354,14 @@ export default function CustomWorkoutDetailPage() {
         {editing ? (
           <div className="space-y-4">
             {editExercises.map((exercise, index) => (
-              <div key={index} className="rounded-xl bg-white p-5 shadow-sm">
+              <div key={index} className="rounded-xl bg-white dark:bg-gray-900 p-5 shadow-sm">
                 <div className="mb-3 flex items-center justify-between">
                   <span className="text-sm font-medium text-muted">Exercise {index + 1}</span>
                   {editExercises.length > 1 && (
                     <button
                       type="button"
                       onClick={() => removeExercise(index)}
-                      className="rounded-lg p-1.5 text-red-500 hover:bg-red-50"
+                      className="rounded-lg p-1.5 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20"
                     >
                       <Trash2 className="h-4 w-4" />
                     </button>
@@ -373,32 +373,32 @@ export default function CustomWorkoutDetailPage() {
                     value={exercise.exerciseName}
                     onChange={(e) => updateExercise(index, 'exerciseName', e.target.value)}
                     placeholder="Exercise name"
-                    className="w-full rounded-lg border border-border bg-white px-3 py-2 text-sm text-gray-900 placeholder:text-muted focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+                    className="w-full rounded-lg border border-border bg-white dark:bg-gray-800 px-3 py-2 text-sm text-gray-900 dark:text-white placeholder:text-muted focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                   />
                   <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
                     <div>
-                      <label className="mb-1 block text-xs font-medium text-gray-600">Sets</label>
+                      <label className="mb-1 block text-xs font-medium text-gray-600 dark:text-gray-400">Sets</label>
                       <input
                         type="number"
                         value={exercise.sets}
                         onChange={(e) => updateExercise(index, 'sets', parseInt(e.target.value) || 1)}
                         min={1}
-                        className="w-full rounded-lg border border-border bg-white px-3 py-2 text-sm text-gray-900 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+                        className="w-full rounded-lg border border-border bg-white dark:bg-gray-800 px-3 py-2 text-sm text-gray-900 dark:text-white focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                       />
                     </div>
                     <div>
-                      <label className="mb-1 block text-xs font-medium text-gray-600">Reps</label>
+                      <label className="mb-1 block text-xs font-medium text-gray-600 dark:text-gray-400">Reps</label>
                       <input
                         type="number"
                         value={exercise.reps}
                         onChange={(e) => updateExercise(index, 'reps', e.target.value ? parseInt(e.target.value) : '')}
                         min={1}
                         placeholder="--"
-                        className="w-full rounded-lg border border-border bg-white px-3 py-2 text-sm text-gray-900 placeholder:text-muted focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+                        className="w-full rounded-lg border border-border bg-white dark:bg-gray-800 px-3 py-2 text-sm text-gray-900 dark:text-white placeholder:text-muted focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                       />
                     </div>
                     <div>
-                      <label className="mb-1 block text-xs font-medium text-gray-600">Weight (kg)</label>
+                      <label className="mb-1 block text-xs font-medium text-gray-600 dark:text-gray-400">Weight (kg)</label>
                       <input
                         type="number"
                         value={exercise.weight}
@@ -406,11 +406,11 @@ export default function CustomWorkoutDetailPage() {
                         min={0}
                         step={0.5}
                         placeholder="--"
-                        className="w-full rounded-lg border border-border bg-white px-3 py-2 text-sm text-gray-900 placeholder:text-muted focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+                        className="w-full rounded-lg border border-border bg-white dark:bg-gray-800 px-3 py-2 text-sm text-gray-900 dark:text-white placeholder:text-muted focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                       />
                     </div>
                     <div>
-                      <label className="mb-1 block text-xs font-medium text-gray-600">Rest (sec)</label>
+                      <label className="mb-1 block text-xs font-medium text-gray-600 dark:text-gray-400">Rest (sec)</label>
                       <input
                         type="number"
                         value={exercise.restSeconds}
@@ -418,7 +418,7 @@ export default function CustomWorkoutDetailPage() {
                         min={0}
                         step={5}
                         placeholder="--"
-                        className="w-full rounded-lg border border-border bg-white px-3 py-2 text-sm text-gray-900 placeholder:text-muted focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+                        className="w-full rounded-lg border border-border bg-white dark:bg-gray-800 px-3 py-2 text-sm text-gray-900 dark:text-white placeholder:text-muted focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                       />
                     </div>
                   </div>
@@ -427,7 +427,7 @@ export default function CustomWorkoutDetailPage() {
                     value={exercise.notes}
                     onChange={(e) => updateExercise(index, 'notes', e.target.value)}
                     placeholder="Notes (optional)"
-                    className="w-full rounded-lg border border-border bg-white px-3 py-2 text-sm text-gray-900 placeholder:text-muted focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+                    className="w-full rounded-lg border border-border bg-white dark:bg-gray-800 px-3 py-2 text-sm text-gray-900 dark:text-white placeholder:text-muted focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                   />
                 </div>
               </div>
@@ -436,7 +436,7 @@ export default function CustomWorkoutDetailPage() {
             <button
               type="button"
               onClick={addExercise}
-              className="flex w-full items-center justify-center gap-2 rounded-xl border-2 border-dashed border-gray-200 py-4 text-sm font-medium text-muted transition-colors hover:border-primary hover:text-primary"
+              className="flex w-full items-center justify-center gap-2 rounded-xl border-2 border-dashed border-gray-200 dark:border-gray-700 py-4 text-sm font-medium text-muted transition-colors hover:border-primary hover:text-primary"
             >
               <Plus className="h-4 w-4" />
               Add Another Exercise
@@ -450,11 +450,11 @@ export default function CustomWorkoutDetailPage() {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.2, delay: index * 0.05 }}
-                className="rounded-xl bg-white p-5 shadow-sm"
+                className="rounded-xl bg-white dark:bg-gray-900 p-5 shadow-sm"
               >
                 <div className="flex items-start justify-between">
                   <div>
-                    <h3 className="text-base font-semibold text-gray-900">
+                    <h3 className="text-base font-semibold text-gray-900 dark:text-white">
                       {exercise.exerciseName}
                     </h3>
                     {exercise.notes && (
@@ -464,7 +464,7 @@ export default function CustomWorkoutDetailPage() {
                   <span className="text-xs font-medium text-muted">#{index + 1}</span>
                 </div>
 
-                <div className="mt-3 flex flex-wrap items-center gap-4 text-sm text-gray-700">
+                <div className="mt-3 flex flex-wrap items-center gap-4 text-sm text-gray-700 dark:text-gray-300">
                   <span className="flex items-center gap-1.5">
                     <Dumbbell className="h-4 w-4 text-primary" />
                     {exercise.sets} sets
@@ -499,7 +499,7 @@ export default function CustomWorkoutDetailPage() {
         <div className="flex gap-3">
           <button
             onClick={cancelEditing}
-            className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-border bg-white px-6 py-3 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50"
+            className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-border bg-white dark:bg-gray-900 px-6 py-3 text-sm font-medium text-gray-700 dark:text-gray-300 transition-colors hover:bg-gray-50 dark:hover:bg-gray-800"
           >
             <X className="h-4 w-4" />
             Cancel
@@ -539,9 +539,9 @@ export default function CustomWorkoutDetailPage() {
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="w-full max-w-sm rounded-xl bg-white p-6 shadow-lg"
+            className="w-full max-w-sm rounded-xl bg-white dark:bg-gray-900 p-6 shadow-lg"
           >
-            <h3 className="text-lg font-bold text-gray-900">Delete Workout</h3>
+            <h3 className="text-lg font-bold text-gray-900 dark:text-white">Delete Workout</h3>
             <p className="mt-2 text-sm text-muted">
               Are you sure you want to delete &quot;{workout.name}&quot;? This action cannot be undone.
             </p>
@@ -549,7 +549,7 @@ export default function CustomWorkoutDetailPage() {
               <button
                 onClick={() => setShowDeleteConfirm(false)}
                 disabled={deleting}
-                className="flex-1 rounded-lg border border-border bg-white px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50"
+                className="flex-1 rounded-lg border border-border bg-white dark:bg-gray-900 px-4 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
               >
                 Cancel
               </button>

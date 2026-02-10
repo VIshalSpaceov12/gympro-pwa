@@ -119,11 +119,11 @@ export default function VideoDetailPage() {
   if (loading) {
     return (
       <div>
-        <div className="mb-6 h-5 w-32 animate-pulse rounded bg-gray-200" />
-        <div className="aspect-video w-full animate-pulse rounded-xl bg-gray-200" />
-        <div className="mt-4 h-8 w-2/3 animate-pulse rounded bg-gray-200" />
-        <div className="mt-3 h-4 w-full animate-pulse rounded bg-gray-200" />
-        <div className="mt-2 h-4 w-3/4 animate-pulse rounded bg-gray-200" />
+        <div className="mb-6 h-5 w-32 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
+        <div className="aspect-video w-full animate-pulse rounded-xl bg-gray-200 dark:bg-gray-700" />
+        <div className="mt-4 h-8 w-2/3 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
+        <div className="mt-3 h-4 w-full animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
+        <div className="mt-2 h-4 w-3/4 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
       </div>
     );
   }
@@ -131,7 +131,7 @@ export default function VideoDetailPage() {
   if (error || !video) {
     return (
       <div className="flex flex-col items-center justify-center py-16">
-        <h2 className="text-lg font-semibold text-gray-900">{error || 'Video not found'}</h2>
+        <h2 className="text-lg font-semibold text-gray-900 dark:text-white">{error || 'Video not found'}</h2>
         <Link href="/workouts" className="mt-3 text-sm font-medium text-primary hover:underline">
           Back to Workouts
         </Link>
@@ -207,7 +207,7 @@ export default function VideoDetailPage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3, delay: 0.1 }}
       >
-        <h1 className="text-xl font-bold text-gray-900 sm:text-2xl">{video.title}</h1>
+        <h1 className="text-xl font-bold text-gray-900 dark:text-white sm:text-2xl">{video.title}</h1>
 
         {/* Category link */}
         <Link
@@ -219,9 +219,9 @@ export default function VideoDetailPage() {
 
         {/* Info Row */}
         <div className="mt-4 flex flex-wrap gap-3">
-          <div className="flex items-center gap-1.5 rounded-lg bg-white px-3 py-2 text-sm shadow-sm">
+          <div className="flex items-center gap-1.5 rounded-lg bg-white dark:bg-gray-900 px-3 py-2 text-sm shadow-sm">
             <Clock className="h-4 w-4 text-muted" />
-            <span className="text-gray-700">{formatDuration(video.duration)}</span>
+            <span className="text-gray-700 dark:text-gray-300">{formatDuration(video.duration)}</span>
           </div>
 
           {difficulty && (
@@ -231,37 +231,37 @@ export default function VideoDetailPage() {
           )}
 
           {video.caloriesBurned && (
-            <div className="flex items-center gap-1.5 rounded-lg bg-white px-3 py-2 text-sm shadow-sm">
+            <div className="flex items-center gap-1.5 rounded-lg bg-white dark:bg-gray-900 px-3 py-2 text-sm shadow-sm">
               <Flame className="h-4 w-4 text-orange-500" />
-              <span className="text-gray-700">{video.caloriesBurned} cal</span>
+              <span className="text-gray-700 dark:text-gray-300">{video.caloriesBurned} cal</span>
             </div>
           )}
 
           {video.viewCount !== undefined && (
-            <div className="flex items-center gap-1.5 rounded-lg bg-white px-3 py-2 text-sm shadow-sm">
+            <div className="flex items-center gap-1.5 rounded-lg bg-white dark:bg-gray-900 px-3 py-2 text-sm shadow-sm">
               <Eye className="h-4 w-4 text-muted" />
-              <span className="text-gray-700">{video.viewCount.toLocaleString()} views</span>
+              <span className="text-gray-700 dark:text-gray-300">{video.viewCount.toLocaleString()} views</span>
             </div>
           )}
         </div>
 
         {/* Description */}
         {video.description && (
-          <div className="mt-4 rounded-xl bg-white p-4 shadow-sm">
-            <h3 className="mb-2 text-sm font-semibold text-gray-900">About this workout</h3>
-            <p className="text-sm leading-relaxed text-gray-600">{video.description}</p>
+          <div className="mt-4 rounded-xl bg-white dark:bg-gray-900 p-4 shadow-sm">
+            <h3 className="mb-2 text-sm font-semibold text-gray-900 dark:text-white">About this workout</h3>
+            <p className="text-sm leading-relaxed text-gray-600 dark:text-gray-400">{video.description}</p>
           </div>
         )}
 
         {/* Equipment Needed */}
         {video.equipmentNeeded && video.equipmentNeeded.length > 0 && (
-          <div className="mt-4 rounded-xl bg-white p-4 shadow-sm">
-            <h3 className="mb-2 text-sm font-semibold text-gray-900">Equipment Needed</h3>
+          <div className="mt-4 rounded-xl bg-white dark:bg-gray-900 p-4 shadow-sm">
+            <h3 className="mb-2 text-sm font-semibold text-gray-900 dark:text-white">Equipment Needed</h3>
             <div className="flex flex-wrap gap-2">
               {video.equipmentNeeded.map((item) => (
                 <span
                   key={item}
-                  className="rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-700"
+                  className="rounded-full bg-gray-100 dark:bg-gray-800 px-3 py-1 text-xs font-medium text-gray-700 dark:text-gray-300"
                 >
                   {item}
                 </span>
@@ -305,7 +305,7 @@ export default function VideoDetailPage() {
       {/* Related Videos */}
       {related.length > 0 && (
         <section className="mt-10">
-          <h2 className="mb-4 text-lg font-bold text-gray-900">Related Workouts</h2>
+          <h2 className="mb-4 text-lg font-bold text-gray-900 dark:text-white">Related Workouts</h2>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {related.map((v) => (
               <VideoCard key={v.id} video={v} />

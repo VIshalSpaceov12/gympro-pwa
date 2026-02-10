@@ -181,12 +181,12 @@ function NutritionContent() {
       >
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900 sm:text-3xl">Nutrition</h1>
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white sm:text-3xl">Nutrition</h1>
             <p className="mt-1 text-sm text-muted">Track your meals and macros</p>
           </div>
           <Link
             href="/nutrition/history"
-            className="flex items-center gap-1.5 rounded-lg bg-white px-3 py-2 text-sm font-medium text-gray-700 shadow-sm transition-colors hover:bg-gray-50"
+            className="flex items-center gap-1.5 rounded-lg bg-white dark:bg-gray-900 px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 shadow-sm transition-colors hover:bg-gray-50 dark:hover:bg-gray-800"
           >
             <CalendarDays className="h-4 w-4" />
             History
@@ -198,18 +198,18 @@ function NutritionContent() {
       <div className="mb-6 flex items-center justify-center gap-4">
         <button
           onClick={() => navigateDate(-1)}
-          className="flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-sm transition-colors hover:bg-gray-50"
+          className="flex h-10 w-10 items-center justify-center rounded-full bg-white dark:bg-gray-900 shadow-sm transition-colors hover:bg-gray-50"
         >
-          <ChevronLeft className="h-5 w-5 text-gray-600" />
+          <ChevronLeft className="h-5 w-5 text-gray-600 dark:text-gray-400" />
         </button>
-        <span className="min-w-[140px] text-center text-lg font-semibold text-gray-900">
+        <span className="min-w-[140px] text-center text-lg font-semibold text-gray-900 dark:text-white">
           {formatDisplayDate(currentDate)}
         </span>
         <button
           onClick={() => navigateDate(1)}
-          className="flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-sm transition-colors hover:bg-gray-50"
+          className="flex h-10 w-10 items-center justify-center rounded-full bg-white dark:bg-gray-900 shadow-sm transition-colors hover:bg-gray-50"
         >
-          <ChevronRight className="h-5 w-5 text-gray-600" />
+          <ChevronRight className="h-5 w-5 text-gray-600 dark:text-gray-400" />
         </button>
       </div>
 
@@ -224,10 +224,10 @@ function NutritionContent() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3 }}
-          className="flex flex-col items-center justify-center rounded-xl bg-white py-16 shadow-sm"
+          className="flex flex-col items-center justify-center rounded-xl bg-white dark:bg-gray-900 py-16 shadow-sm"
         >
           <Apple className="mb-4 h-12 w-12 text-gray-300" />
-          <h3 className="text-lg font-semibold text-gray-900">No meals logged</h3>
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">No meals logged</h3>
           <p className="mt-1 mb-6 text-sm text-muted">
             Start tracking your nutrition for {formatDisplayDate(currentDate).toLowerCase()}
           </p>
@@ -251,10 +251,10 @@ function NutritionContent() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3 }}
-            className="mb-6 rounded-xl bg-white p-6 shadow-sm"
+            className="mb-6 rounded-xl bg-white dark:bg-gray-900 p-6 shadow-sm"
           >
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide">
+              <h2 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">
                 Calorie Summary
               </h2>
               <Flame className="h-5 w-5 text-orange-500" />
@@ -285,7 +285,7 @@ function NutritionContent() {
                   />
                 </svg>
                 <div className="absolute inset-0 flex flex-col items-center justify-center">
-                  <span className="text-lg font-bold text-gray-900">
+                  <span className="text-lg font-bold text-gray-900 dark:text-white">
                     {summary.totalCalories}
                   </span>
                   <span className="text-[10px] text-muted">kcal</span>
@@ -296,7 +296,7 @@ function NutritionContent() {
               <div className="flex-1 space-y-1">
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-muted">Consumed</span>
-                  <span className="text-sm font-semibold text-gray-900">
+                  <span className="text-sm font-semibold text-gray-900 dark:text-white">
                     {summary.totalCalories} kcal
                   </span>
                 </div>
@@ -304,7 +304,7 @@ function NutritionContent() {
                   <>
                     <div className="flex items-center justify-between">
                       <span className="text-sm text-muted">Target</span>
-                      <span className="text-sm font-semibold text-gray-900">
+                      <span className="text-sm font-semibold text-gray-900 dark:text-white">
                         {summary.targetCalories} kcal
                       </span>
                     </div>
@@ -335,13 +335,13 @@ function NutritionContent() {
             className="mb-6 grid grid-cols-3 gap-3"
           >
             {/* Protein */}
-            <div className="rounded-xl bg-white p-4 shadow-sm">
+            <div className="rounded-xl bg-white dark:bg-gray-900 p-4 shadow-sm">
               <div className="mb-2 flex items-center justify-between">
                 <span className="text-xs font-semibold text-blue-600 uppercase">
                   Protein
                 </span>
               </div>
-              <p className="text-xl font-bold text-gray-900">
+              <p className="text-xl font-bold text-gray-900 dark:text-white">
                 {summary.totalProtein}
                 <span className="text-xs font-normal text-muted">g</span>
               </p>
@@ -356,13 +356,13 @@ function NutritionContent() {
             </div>
 
             {/* Carbs */}
-            <div className="rounded-xl bg-white p-4 shadow-sm">
+            <div className="rounded-xl bg-white dark:bg-gray-900 p-4 shadow-sm">
               <div className="mb-2 flex items-center justify-between">
                 <span className="text-xs font-semibold text-amber-600 uppercase">
                   Carbs
                 </span>
               </div>
-              <p className="text-xl font-bold text-gray-900">
+              <p className="text-xl font-bold text-gray-900 dark:text-white">
                 {summary.totalCarbs}
                 <span className="text-xs font-normal text-muted">g</span>
               </p>
@@ -377,13 +377,13 @@ function NutritionContent() {
             </div>
 
             {/* Fat */}
-            <div className="rounded-xl bg-white p-4 shadow-sm">
+            <div className="rounded-xl bg-white dark:bg-gray-900 p-4 shadow-sm">
               <div className="mb-2 flex items-center justify-between">
                 <span className="text-xs font-semibold text-rose-600 uppercase">
                   Fat
                 </span>
               </div>
-              <p className="text-xl font-bold text-gray-900">
+              <p className="text-xl font-bold text-gray-900 dark:text-white">
                 {summary.totalFat}
                 <span className="text-xs font-normal text-muted">g</span>
               </p>
@@ -415,12 +415,12 @@ function NutritionContent() {
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.3, delay: 0.15 + idx * 0.05 }}
-                  className="rounded-xl bg-white shadow-sm"
+                  className="rounded-xl bg-white dark:bg-gray-900 shadow-sm"
                 >
-                  <div className="flex items-center justify-between border-b border-gray-100 px-4 py-3">
+                  <div className="flex items-center justify-between border-b border-gray-100 dark:border-gray-800 px-4 py-3">
                     <div className="flex items-center gap-2">
                       <span className="text-lg">{MEAL_TYPE_ICONS[mealType]}</span>
-                      <h3 className="font-semibold text-gray-900">
+                      <h3 className="font-semibold text-gray-900 dark:text-white">
                         {MEAL_TYPE_LABELS[mealType]}
                       </h3>
                       {mealCalories > 0 && (
@@ -439,7 +439,7 @@ function NutritionContent() {
                   </div>
 
                   {mealsOfType.length > 0 ? (
-                    <div className="divide-y divide-gray-50">
+                    <div className="divide-y divide-gray-50 dark:divide-gray-800">
                       {mealsOfType.map((meal) =>
                         meal.items.map((item) => (
                           <div
@@ -447,7 +447,7 @@ function NutritionContent() {
                             className="flex items-center justify-between px-4 py-2.5"
                           >
                             <div className="flex-1 min-w-0">
-                              <p className="text-sm font-medium text-gray-900 truncate">
+                              <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
                                 {item.name}
                               </p>
                               <p className="text-xs text-muted">
@@ -457,7 +457,7 @@ function NutritionContent() {
                               </p>
                             </div>
                             <div className="ml-4 text-right flex-shrink-0">
-                              <p className="text-sm font-semibold text-gray-900">
+                              <p className="text-sm font-semibold text-gray-900 dark:text-white">
                                 {item.calories ?? 0} kcal
                               </p>
                               <p className="text-[10px] text-muted">

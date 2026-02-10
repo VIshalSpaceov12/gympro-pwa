@@ -51,22 +51,22 @@ export default function CreatePostPage() {
       <div className="mb-6 flex items-center gap-4">
         <button
           onClick={() => router.back()}
-          className="flex h-10 w-10 items-center justify-center rounded-lg text-gray-600 hover:bg-gray-100 transition-colors"
+          className="flex h-10 w-10 items-center justify-center rounded-lg text-gray-600 hover:bg-gray-100 transition-colors dark:text-gray-400 dark:hover:bg-gray-800"
         >
           <ArrowLeft className="h-5 w-5" />
         </button>
-        <h1 className="text-xl font-bold text-gray-900">Create Post</h1>
+        <h1 className="text-xl font-bold text-gray-900 dark:text-white">Create Post</h1>
       </div>
 
       {/* Error */}
       {error && (
-        <div className="mb-4 rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700">
+        <div className="mb-4 rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700 dark:bg-red-900/20 dark:border-red-800 dark:text-red-400">
           {error}
         </div>
       )}
 
       {/* Form */}
-      <div className="rounded-xl bg-white shadow-sm">
+      <div className="rounded-xl bg-white shadow-sm dark:bg-gray-900">
         {/* Content textarea */}
         <div className="p-4">
           <textarea
@@ -75,7 +75,7 @@ export default function CreatePostPage() {
             placeholder="What's on your mind? Share your fitness journey..."
             rows={6}
             maxLength={MAX_CONTENT_LENGTH}
-            className="w-full resize-none text-sm text-gray-900 placeholder:text-muted focus:outline-none leading-relaxed"
+            className="w-full resize-none text-sm text-gray-900 dark:text-white placeholder:text-muted focus:outline-none leading-relaxed"
             autoFocus
           />
         </div>
@@ -97,7 +97,7 @@ export default function CreatePostPage() {
         </div>
 
         {/* Image URL input */}
-        <div className="border-t border-gray-100 px-4 py-3">
+        <div className="border-t border-gray-100 dark:border-gray-800 px-4 py-3">
           <div className="flex items-center gap-2">
             <ImageIcon className="h-4 w-4 text-muted" />
             <input
@@ -105,7 +105,7 @@ export default function CreatePostPage() {
               value={imageUrl}
               onChange={(e) => setImageUrl(e.target.value)}
               placeholder="Image URL (optional)"
-              className="flex-1 text-sm text-gray-900 placeholder:text-muted focus:outline-none"
+              className="flex-1 text-sm text-gray-900 dark:text-white placeholder:text-muted focus:outline-none"
             />
           </div>
         </div>
@@ -126,7 +126,7 @@ export default function CreatePostPage() {
         )}
 
         {/* Submit */}
-        <div className="flex items-center justify-end border-t border-gray-100 px-4 py-3">
+        <div className="flex items-center justify-end border-t border-gray-100 dark:border-gray-800 px-4 py-3">
           <button
             onClick={handleSubmit}
             disabled={!isValid || submitting}

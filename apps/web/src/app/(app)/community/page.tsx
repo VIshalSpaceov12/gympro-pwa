@@ -185,7 +185,7 @@ export default function CommunityPage() {
     <div className="relative">
       {/* Header */}
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-900 sm:text-3xl">Community</h1>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white sm:text-3xl">Community</h1>
         <p className="mt-1 text-sm text-muted">
           Share your fitness journey with the community
         </p>
@@ -197,26 +197,26 @@ export default function CommunityPage() {
           {Array.from({ length: 3 }).map((_, i) => (
             <div
               key={i}
-              className="animate-pulse rounded-xl bg-white p-4 shadow-sm"
+              className="animate-pulse rounded-xl bg-white p-4 shadow-sm dark:bg-gray-900"
             >
               <div className="flex items-center gap-3 mb-3">
-                <div className="h-10 w-10 rounded-full bg-gray-200" />
+                <div className="h-10 w-10 rounded-full bg-gray-200 dark:bg-gray-700" />
                 <div className="flex-1 space-y-2">
-                  <div className="h-4 w-32 rounded bg-gray-200" />
-                  <div className="h-3 w-20 rounded bg-gray-200" />
+                  <div className="h-4 w-32 rounded bg-gray-200 dark:bg-gray-700" />
+                  <div className="h-3 w-20 rounded bg-gray-200 dark:bg-gray-700" />
                 </div>
               </div>
               <div className="space-y-2">
-                <div className="h-4 w-full rounded bg-gray-200" />
-                <div className="h-4 w-3/4 rounded bg-gray-200" />
+                <div className="h-4 w-full rounded bg-gray-200 dark:bg-gray-700" />
+                <div className="h-4 w-3/4 rounded bg-gray-200 dark:bg-gray-700" />
               </div>
             </div>
           ))}
         </div>
       ) : posts.length === 0 ? (
-        <div className="flex flex-col items-center justify-center rounded-xl bg-white py-16 shadow-sm">
+        <div className="flex flex-col items-center justify-center rounded-xl bg-white py-16 shadow-sm dark:bg-gray-900">
           <MessageSquare className="mb-4 h-12 w-12 text-gray-300" />
-          <h3 className="text-lg font-semibold text-gray-900">No posts yet</h3>
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">No posts yet</h3>
           <p className="mt-1 text-sm text-muted">
             Be the first to share with the community!
           </p>
@@ -233,14 +233,14 @@ export default function CommunityPage() {
           {posts.map((post) => (
             <div
               key={post.id}
-              className="rounded-xl bg-white shadow-sm overflow-hidden"
+              className="rounded-xl bg-white shadow-sm overflow-hidden dark:bg-gray-900"
             >
               {/* Post header */}
               <div className="flex items-center justify-between px-4 pt-4">
                 <div className="flex items-center gap-3">
                   <UserAvatar user={post.user} />
                   <div>
-                    <p className="text-sm font-semibold text-gray-900">
+                    <p className="text-sm font-semibold text-gray-900 dark:text-white">
                       {post.user.firstName} {post.user.lastName}
                     </p>
                     <p className="text-xs text-muted">{timeAgo(post.createdAt)}</p>
@@ -250,7 +250,7 @@ export default function CommunityPage() {
                 {user && post.user.id === user.id && (
                   <button
                     onClick={() => handleDelete(post.id)}
-                    className="p-2 text-gray-400 hover:text-red-500 transition-colors rounded-lg hover:bg-red-50"
+                    className="p-2 text-gray-400 hover:text-red-500 transition-colors rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20"
                     title="Delete post"
                   >
                     <Trash2 className="h-4 w-4" />
@@ -263,7 +263,7 @@ export default function CommunityPage() {
                 className="px-4 py-3 cursor-pointer"
                 onClick={() => router.push(`/community/${post.id}`)}
               >
-                <p className="text-sm text-gray-800 whitespace-pre-wrap leading-relaxed">
+                <p className="text-sm text-gray-800 dark:text-gray-200 whitespace-pre-wrap leading-relaxed">
                   {post.content}
                 </p>
               </div>
@@ -284,7 +284,7 @@ export default function CommunityPage() {
               )}
 
               {/* Post actions */}
-              <div className="flex items-center gap-6 px-4 py-3 border-t border-gray-100">
+              <div className="flex items-center gap-6 px-4 py-3 border-t border-gray-100 dark:border-gray-800">
                 <button
                   onClick={() => handleLike(post.id)}
                   className={cn(
@@ -320,7 +320,7 @@ export default function CommunityPage() {
               <button
                 onClick={handleLoadMore}
                 disabled={loadingMore}
-                className="inline-flex items-center gap-2 rounded-lg bg-white px-6 py-3 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 transition-colors disabled:opacity-50"
+                className="inline-flex items-center gap-2 rounded-lg bg-white px-6 py-3 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 transition-colors disabled:opacity-50 dark:bg-gray-900 dark:text-gray-300 dark:hover:bg-gray-800"
               >
                 {loadingMore ? (
                   <>

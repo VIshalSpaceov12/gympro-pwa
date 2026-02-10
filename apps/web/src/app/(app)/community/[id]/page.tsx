@@ -226,21 +226,21 @@ export default function PostDetailPage() {
       <div className="mb-4 flex items-center gap-4">
         <button
           onClick={() => router.back()}
-          className="flex h-10 w-10 items-center justify-center rounded-lg text-gray-600 hover:bg-gray-100 transition-colors"
+          className="flex h-10 w-10 items-center justify-center rounded-lg text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800 transition-colors"
         >
           <ArrowLeft className="h-5 w-5" />
         </button>
-        <h1 className="text-lg font-bold text-gray-900">Post</h1>
+        <h1 className="text-lg font-bold text-gray-900 dark:text-white">Post</h1>
       </div>
 
       {/* Post */}
-      <div className="rounded-xl bg-white shadow-sm overflow-hidden">
+      <div className="rounded-xl bg-white shadow-sm dark:bg-gray-900 overflow-hidden">
         {/* Post header */}
         <div className="flex items-center justify-between px-4 pt-4">
           <div className="flex items-center gap-3">
             <UserAvatar user={post.user} />
             <div>
-              <p className="text-sm font-semibold text-gray-900">
+              <p className="text-sm font-semibold text-gray-900 dark:text-white">
                 {post.user.firstName} {post.user.lastName}
               </p>
               <p className="text-xs text-muted">{timeAgo(post.createdAt)}</p>
@@ -250,7 +250,7 @@ export default function PostDetailPage() {
           {user && post.userId === user.id && (
             <button
               onClick={handleDeletePost}
-              className="p-2 text-gray-400 hover:text-red-500 transition-colors rounded-lg hover:bg-red-50"
+              className="p-2 text-gray-400 hover:text-red-500 transition-colors rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20"
               title="Delete post"
             >
               <Trash2 className="h-4 w-4" />
@@ -260,7 +260,7 @@ export default function PostDetailPage() {
 
         {/* Post content */}
         <div className="px-4 py-3">
-          <p className="text-sm text-gray-800 whitespace-pre-wrap leading-relaxed">
+          <p className="text-sm text-gray-800 dark:text-gray-200 whitespace-pre-wrap leading-relaxed">
             {post.content}
           </p>
         </div>
@@ -276,7 +276,7 @@ export default function PostDetailPage() {
         )}
 
         {/* Post actions */}
-        <div className="flex items-center gap-6 px-4 py-3 border-t border-gray-100">
+        <div className="flex items-center gap-6 px-4 py-3 border-t border-gray-100 dark:border-gray-800">
           <button
             onClick={handleLike}
             className={cn(
@@ -304,7 +304,7 @@ export default function PostDetailPage() {
 
       {/* Comments section */}
       <div className="mt-4">
-        <h2 className="mb-3 text-sm font-semibold text-gray-900">
+        <h2 className="mb-3 text-sm font-semibold text-gray-900 dark:text-white">
           Comments ({post.commentsCount})
         </h2>
 
@@ -317,13 +317,13 @@ export default function PostDetailPage() {
             {post.comments.map((comment) => (
               <div
                 key={comment.id}
-                className="flex gap-3 rounded-lg bg-white p-3 shadow-sm"
+                className="flex gap-3 rounded-lg bg-white p-3 shadow-sm dark:bg-gray-900"
               >
                 <UserAvatar user={comment.user} size="sm" />
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between gap-2">
                     <div className="flex items-center gap-2">
-                      <p className="text-sm font-semibold text-gray-900">
+                      <p className="text-sm font-semibold text-gray-900 dark:text-white">
                         {comment.user.firstName} {comment.user.lastName}
                       </p>
                       <span className="text-xs text-muted">
@@ -341,7 +341,7 @@ export default function PostDetailPage() {
                       </button>
                     )}
                   </div>
-                  <p className="mt-1 text-sm text-gray-700 whitespace-pre-wrap">
+                  <p className="mt-1 text-sm text-gray-700 dark:text-gray-300 whitespace-pre-wrap">
                     {comment.content}
                   </p>
                 </div>
@@ -352,7 +352,7 @@ export default function PostDetailPage() {
       </div>
 
       {/* Sticky comment input */}
-      <div className="fixed bottom-16 left-0 right-0 z-30 border-t border-gray-200 bg-white px-4 py-3 sm:bottom-0">
+      <div className="fixed bottom-16 left-0 right-0 z-30 border-t border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-900 px-4 py-3 sm:bottom-0">
         <div className="mx-auto flex max-w-2xl items-center gap-3">
           <input
             type="text"
@@ -360,7 +360,7 @@ export default function PostDetailPage() {
             onChange={(e) => setCommentText(e.target.value)}
             placeholder="Write a comment..."
             maxLength={500}
-            className="flex-1 rounded-full border border-border bg-gray-50 px-4 py-2.5 text-sm text-gray-900 placeholder:text-muted focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+            className="flex-1 rounded-full border border-border bg-gray-50 px-4 py-2.5 text-sm text-gray-900 dark:bg-gray-800 dark:text-white placeholder:text-muted focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
             onKeyDown={(e) => {
               if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
@@ -375,7 +375,7 @@ export default function PostDetailPage() {
               'flex h-10 w-10 items-center justify-center rounded-full transition-colors',
               commentText.trim() && !submittingComment
                 ? 'bg-primary text-white hover:bg-primary-dark'
-                : 'bg-gray-100 text-gray-400'
+                : 'bg-gray-100 text-gray-400 dark:bg-gray-800 dark:text-gray-500'
             )}
           >
             {submittingComment ? (
