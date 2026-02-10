@@ -1,0 +1,404 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ==========================================
+// USERS & AUTH
+// ==========================================
+
+enum UserRole {
+  USER
+  TRAINER
+  ADMIN
+}
+
+enum SubscriptionStatus {
+  FREE
+  PREMIUM
+}
+
+enum ExperienceLevel {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+}
+
+model User {
+  id                 String             @id @default(uuid())
+  email              String             @unique
+  passwordHash       String
+  firstName          String
+  lastName           String
+  avatarUrl          String?
+  role               UserRole           @default(USER)
+  subscriptionStatus SubscriptionStatus @default(FREE)
+  isActive           Boolean            @default(true)
+  emailVerified      Boolean            @default(false)
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @updatedAt
+
+  profile          UserProfile?
+  workoutSessions  WorkoutSession[]
+  customWorkouts   CustomWorkout[]
+  mealPlans        MealPlan[]
+  posts            Post[]
+  comments         Comment[]
+  likes            Like[]
+  activityLogs     ActivityLog[]
+  userAchievements UserAchievement[]
+  leaderboardEntries LeaderboardEntry[]
+
+  @@map("users")
+}
+
+model UserProfile {
+  id              String          @id @default(uuid())
+  userId          String          @unique
+  bio             String?
+  dateOfBirth     DateTime?
+  gender          String?
+  height          Float?
+  weight          Float?
+  fitnessGoal     String?
+  experienceLevel ExperienceLevel?
+  preferences     Json?
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("user_profiles")
+}
+
+// ==========================================
+// WORKOUTS & VIDEOS
+// ==========================================
+
+enum Difficulty {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+}
+
+model WorkoutCategory {
+  id          String   @id @default(uuid())
+  name        String   @unique
+  slug        String   @unique
+  description String?
+  imageUrl    String?
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  videos WorkoutVideo[]
+
+  @@map("workout_categories")
+}
+
+model WorkoutVideo {
+  id              String     @id @default(uuid())
+  title           String
+  description     String?
+  thumbnailUrl    String?
+  videoUrl        String
+  duration        Int        // seconds
+  difficulty      Difficulty
+  categoryId      String
+  trainerId       String?
+  equipmentNeeded Json?      // string array
+  caloriesBurned  Int?       // estimated
+  isPremium       Boolean    @default(false)
+  isPublished     Boolean    @default(false)
+  viewCount       Int        @default(0)
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+
+  category WorkoutCategory @relation(fields: [categoryId], references: [id])
+  sessions WorkoutSession[]
+
+  @@map("workout_videos")
+}
+
+model WorkoutSession {
+  id              String    @id @default(uuid())
+  userId          String
+  videoId         String?
+  customWorkoutId String?
+  startedAt       DateTime  @default(now())
+  completedAt     DateTime?
+  duration        Int?      // seconds
+  caloriesBurned  Int?
+  notes           String?
+  createdAt       DateTime  @default(now())
+
+  user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  video         WorkoutVideo?  @relation(fields: [videoId], references: [id])
+  customWorkout CustomWorkout? @relation(fields: [customWorkoutId], references: [id])
+
+  @@map("workout_sessions")
+}
+
+model CustomWorkout {
+  id          String   @id @default(uuid())
+  userId      String
+  name        String
+  description String?
+  isPublic    Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user      User                    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  exercises CustomWorkoutExercise[]
+  sessions  WorkoutSession[]
+
+  @@map("custom_workouts")
+}
+
+model CustomWorkoutExercise {
+  id              String  @id @default(uuid())
+  customWorkoutId String
+  exerciseName    String
+  sets            Int
+  reps            Int?
+  weight          Float?
+  restSeconds     Int?
+  sortOrder       Int     @default(0)
+  notes           String?
+
+  customWorkout CustomWorkout @relation(fields: [customWorkoutId], references: [id], onDelete: Cascade)
+
+  @@map("custom_workout_exercises")
+}
+
+// ==========================================
+// NUTRITION
+// ==========================================
+
+enum MealType {
+  BREAKFAST
+  LUNCH
+  DINNER
+  SNACK
+}
+
+model MealPlan {
+  id             String   @id @default(uuid())
+  userId         String
+  name           String
+  date           DateTime @db.Date
+  targetCalories Int?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  user  User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  meals Meal[]
+
+  @@map("meal_plans")
+}
+
+model Meal {
+  id         String   @id @default(uuid())
+  mealPlanId String
+  type       MealType
+  name       String
+  sortOrder  Int      @default(0)
+
+  mealPlan MealPlan   @relation(fields: [mealPlanId], references: [id], onDelete: Cascade)
+  items    MealItem[]
+
+  @@map("meals")
+}
+
+model MealItem {
+  id       String @id @default(uuid())
+  mealId   String
+  name     String
+  calories Int?
+  protein  Float? // grams
+  carbs    Float? // grams
+  fat      Float? // grams
+  quantity Float?
+  unit     String?
+  sortOrder Int   @default(0)
+
+  meal Meal @relation(fields: [mealId], references: [id], onDelete: Cascade)
+
+  @@map("meal_items")
+}
+
+// ==========================================
+// COMMUNITY
+// ==========================================
+
+model Post {
+  id            String   @id @default(uuid())
+  userId        String
+  content       String
+  imageUrl      String?
+  likesCount    Int      @default(0)
+  commentsCount Int      @default(0)
+  isPublished   Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  comments Comment[]
+  likes    Like[]
+
+  @@map("posts")
+}
+
+model Comment {
+  id        String   @id @default(uuid())
+  postId    String
+  userId    String
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("comments")
+}
+
+model Like {
+  id        String   @id @default(uuid())
+  postId    String
+  userId    String
+  createdAt DateTime @default(now())
+
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([postId, userId])
+  @@map("likes")
+}
+
+// ==========================================
+// ACTIVITY & ACHIEVEMENTS
+// ==========================================
+
+enum ActivityType {
+  STEPS
+  WORKOUT
+  CALORIES_BURNED
+  WATER
+}
+
+model ActivityLog {
+  id        String       @id @default(uuid())
+  userId    String
+  type      ActivityType
+  value     Float
+  unit      String?
+  date      DateTime     @db.Date
+  createdAt DateTime     @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("activity_logs")
+}
+
+model Achievement {
+  id          String   @id @default(uuid())
+  name        String   @unique
+  description String
+  iconUrl     String?
+  criteria    Json     // e.g., { "type": "workouts_completed", "threshold": 10 }
+  createdAt   DateTime @default(now())
+
+  userAchievements UserAchievement[]
+
+  @@map("achievements")
+}
+
+model UserAchievement {
+  id            String   @id @default(uuid())
+  userId        String
+  achievementId String
+  unlockedAt    DateTime @default(now())
+  progress      Float    @default(0)
+
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  achievement Achievement @relation(fields: [achievementId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, achievementId])
+  @@map("user_achievements")
+}
+
+// ==========================================
+// LEADERBOARD
+// ==========================================
+
+enum LeaderboardPeriod {
+  WEEKLY
+  MONTHLY
+  ALL_TIME
+}
+
+enum LeaderboardCategory {
+  WORKOUTS
+  CALORIES
+  STREAK
+}
+
+model LeaderboardEntry {
+  id        String              @id @default(uuid())
+  userId    String
+  period    LeaderboardPeriod
+  category  LeaderboardCategory
+  score     Float               @default(0)
+  rank      Int                 @default(0)
+  updatedAt DateTime            @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, period, category])
+  @@map("leaderboard_entries")
+}
+
+// ==========================================
+// PRODUCTS / SHOP
+// ==========================================
+
+model ProductCategory {
+  id          String    @id @default(uuid())
+  name        String    @unique
+  slug        String    @unique
+  description String?
+  imageUrl    String?
+  sortOrder   Int       @default(0)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  products Product[]
+
+  @@map("product_categories")
+}
+
+model Product {
+  id          String   @id @default(uuid())
+  name        String
+  slug        String   @unique
+  description String?
+  price       Float
+  comparePrice Float?
+  imageUrl    String?
+  images      Json?
+  categoryId  String
+  isFeatured  Boolean  @default(false)
+  isActive    Boolean  @default(true)
+  stock       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  category ProductCategory @relation(fields: [categoryId], references: [id])
+
+  @@map("products")
+}
