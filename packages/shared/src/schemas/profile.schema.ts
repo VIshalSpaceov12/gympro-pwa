@@ -6,6 +6,7 @@ export const updateProfileSchema = z.object({
   firstName: z.string().min(1).max(50).optional(),
   lastName: z.string().min(1).max(50).optional(),
   avatarUrl: z.string().url('Invalid avatar URL').optional().or(z.literal('')).or(z.literal(null)),
+  phone: z.string().regex(/^\d{10}$/, 'Contact number must be exactly 10 digits').optional().or(z.literal('')).or(z.literal(null)),
   bio: z.string().max(500, 'Bio must be at most 500 characters').optional().or(z.literal('')).or(z.literal(null)),
   dateOfBirth: z.string().optional().or(z.literal('')).or(z.literal(null)),
   gender: z.enum(['MALE', 'FEMALE', 'OTHER', 'PREFER_NOT_TO_SAY']).optional().or(z.literal('')).or(z.literal(null)),

@@ -16,6 +16,7 @@ import {
   CheckCircle,
   AlertCircle,
   Calendar,
+  Phone,
 } from 'lucide-react';
 
 type ThemeMode = 'light' | 'dark' | 'system';
@@ -62,6 +63,7 @@ export default function ProfilePage() {
   // Profile form state
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
+  const [phone, setPhone] = useState('');
   const [bio, setBio] = useState('');
   const [gender, setGender] = useState('');
   const [height, setHeight] = useState('');
@@ -84,6 +86,7 @@ export default function ProfilePage() {
     if (user) {
       setFirstName(user.firstName || '');
       setLastName(user.lastName || '');
+      setPhone(user.phone || '');
       setBio(user.profile?.bio || '');
       setGender(user.profile?.gender || '');
       setHeight(user.profile?.height ? String(user.profile.height) : '');
@@ -110,9 +113,17 @@ export default function ProfilePage() {
     setProfileSaving(true);
 
     try {
+      // Validate phone: must be exactly 10 digits or empty
+      if (phone && !/^\d{10}$/.test(phone)) {
+        showToast('error', 'Contact number must be exactly 10 digits');
+        setProfileSaving(false);
+        return;
+      }
+
       const payload: Record<string, unknown> = {
         firstName,
         lastName,
+        phone: phone || null,
         bio: bio || null,
         gender: gender || null,
         height: height ? parseFloat(height) : null,
@@ -255,6 +266,33 @@ export default function ProfilePage() {
                 required
               />
             </div>
+          </div>
+
+          <div>
+            <label htmlFor="phone" className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
+              Contact Number
+            </label>
+            <div className="relative">
+              <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+              <input
+                id="phone"
+                type="tel"
+                value={phone}
+                onChange={(e) => {
+                  const val = e.target.value.replace(/\D/g, '').slice(0, 10);
+                  setPhone(val);
+                }}
+                placeholder="Enter 10-digit number"
+                maxLength={10}
+                inputMode="numeric"
+                className="w-full rounded-lg border border-border bg-white dark:bg-gray-800 pl-10 pr-3 py-2 text-sm text-gray-900 dark:text-white placeholder-muted focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+              />
+            </div>
+            {phone && phone.length > 0 && phone.length < 10 && (
+              <p className="mt-1 text-xs text-amber-600 dark:text-amber-400">
+                {10 - phone.length} more digit{10 - phone.length !== 1 ? 's' : ''} needed
+              </p>
+            )}
           </div>
 
           <div>

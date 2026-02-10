@@ -68,6 +68,7 @@ export async function login(req: Request, res: Response): Promise<void> {
         passwordHash: true,
         isActive: true,
         avatarUrl: true,
+        phone: true,
       },
     });
 
@@ -166,6 +167,7 @@ export async function getMe(req: Request, res: Response): Promise<void> {
         firstName: true,
         lastName: true,
         avatarUrl: true,
+        phone: true,
         role: true,
         subscriptionStatus: true,
         isActive: true,
@@ -228,13 +230,14 @@ export async function updateProfile(req: Request, res: Response): Promise<void> 
       return;
     }
 
-    const { firstName, lastName, avatarUrl, bio, dateOfBirth, gender, height, weight, fitnessGoal, experienceLevel } = req.body;
+    const { firstName, lastName, avatarUrl, phone, bio, dateOfBirth, gender, height, weight, fitnessGoal, experienceLevel } = req.body;
 
     // Update user fields
     const userData: Record<string, unknown> = {};
     if (firstName !== undefined) userData.firstName = firstName;
     if (lastName !== undefined) userData.lastName = lastName;
     if (avatarUrl !== undefined) userData.avatarUrl = avatarUrl || null;
+    if (phone !== undefined) userData.phone = phone || null;
 
     // Update profile fields
     const profileData: Record<string, unknown> = {};
@@ -267,6 +270,7 @@ export async function updateProfile(req: Request, res: Response): Promise<void> 
         firstName: true,
         lastName: true,
         avatarUrl: true,
+        phone: true,
         role: true,
         subscriptionStatus: true,
         isActive: true,
