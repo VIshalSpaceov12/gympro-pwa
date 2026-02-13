@@ -101,17 +101,22 @@ export async function apiClient<T>(endpoint: string, options: FetchOptions = {})
   // Use provided token, or auto-attach from store
   const authToken = token || getStoredTokens().accessToken;
 
-  const response = await fetch(`${API_BASE_URL}${endpoint}`, {
-    headers: {
-      'Content-Type': 'application/json',
-      ...(authToken ? { Authorization: `Bearer ${authToken}` } : {}),
-      ...headers,
-    },
-    ...rest,
-  });
+  let response: Response;
+  try {
+    response = await fetch(`${API_BASE_URL}${endpoint}`, {
+      headers: {
+        'Content-Type': 'application/json',
+        ...(authToken ? { Authorization: `Bearer ${authToken}` } : {}),
+        ...headers,
+      },
+      ...rest,
+    });
+  } catch {
+    throw new Error('Unable to connect to server. Please check your internet connection and try again.');
+  }
 
-  // Handle 401 - attempt token refresh
-  if (response.status === 401 && !token) {
+  // Handle 401 - attempt token refresh only if we sent an auth token
+  if (response.status === 401 && authToken) {
     // Avoid concurrent refresh requests
     if (!isRefreshing) {
       isRefreshing = true;
@@ -124,14 +129,19 @@ export async function apiClient<T>(endpoint: string, options: FetchOptions = {})
     const newToken = await refreshPromise;
     if (newToken) {
       // Retry the original request with the new token
-      const retryResponse = await fetch(`${API_BASE_URL}${endpoint}`, {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${newToken}`,
-          ...headers,
-        },
-        ...rest,
-      });
+      let retryResponse: Response;
+      try {
+        retryResponse = await fetch(`${API_BASE_URL}${endpoint}`, {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${newToken}`,
+            ...headers,
+          },
+          ...rest,
+        });
+      } catch {
+        throw new Error('Unable to connect to server. Please check your internet connection and try again.');
+      }
 
       if (!retryResponse.ok) {
         const errorData = await retryResponse.json().catch(() => ({ success: false, error: 'An error occurred' }));
